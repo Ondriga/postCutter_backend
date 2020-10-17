@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.GridLayout;
 
-public class Main {
+public class PostCutter {
     private static JFrame frame = new JFrame("EDGE DETECTOR");
     private static JButton buttonPrevious = new JButton("PREV");
     private static JButton buttonNext = new JButton("NEXT");
