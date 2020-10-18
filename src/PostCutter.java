@@ -29,6 +29,8 @@ public class PostCutter {
     private static int fileIndex = 0;
     private static String[] pathNames;
 
+    private static Prewitt prewitt = new Prewitt();
+
     public static void main(String[] args){
         File f = new File("screenshots");
         pathNames = f.list();
@@ -69,18 +71,17 @@ public class PostCutter {
             fileIndex = 0;
         }
         String path = "screenshots/" + pathNames[fileIndex];
-        labelOrigin.setIcon(getResizedIcon(path, labelOrigin.getSize()));
-        labelChange.setIcon(getResizedIcon(path, labelChange.getSize()));
-    }
-
-    private static ImageIcon getResizedIcon(String imagePath, Dimension labelDimension){
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File(imagePath));
-            
+            img = ImageIO.read(new File(path));
+            labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
+            labelChange.setIcon(getResizedIcon(prewitt.highlightEdge(path), labelChange.getSize()));
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
+    }
+
+    private static ImageIcon getResizedIcon(BufferedImage img, Dimension labelDimension){
         Dimension newDimension = getDimension(labelDimension, new Dimension(img.getWidth(), img.getHeight())); 
         Image dimg = img.getScaledInstance((int) newDimension.getWidth(), (int) newDimension.getHeight(), Image.SCALE_SMOOTH);
         return new ImageIcon(dimg);

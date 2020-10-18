@@ -1,10 +1,10 @@
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
 
-public class Prewitt implements EdgeDetector {
+public class Prewitt extends EdgeDetector {
 
     @Override
-    public ImageIcon highlightEdge(String sourceImage) {
-        return null;
+    public BufferedImage highlightEdge(String sourceImage) {
+        return mat2BufferedImage(getGrayScale(sourceImage));
     }
 
 }
