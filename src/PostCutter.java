@@ -1,3 +1,5 @@
+package src;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -17,19 +19,18 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.GridLayout;
 
-public class PostCutter {
-    private static JFrame frame = new JFrame("EDGE DETECTOR");
-    private static JButton buttonPrevious = new JButton("PREV");
-    private static JButton buttonNext = new JButton("NEXT");
-    private static JLabel labelOrigin = new JLabel();
-    private static JLabel labelChange = new JLabel();
-    private static JPanel panelButtons = new JPanel();
-    private static JPanel panelImages = new JPanel();
+public class PostCutter extends JFrame{
+    private JButton buttonPrevious = new JButton("PREV");
+    private JButton buttonNext = new JButton("NEXT");
+    private JLabel labelOrigin = new JLabel();
+    private JLabel labelChange = new JLabel();
+    private JPanel panelButtons = new JPanel();
+    private JPanel panelImages = new JPanel();
 
-    private static int fileIndex = 0;
+    private int fileIndex = 0;
     private static String[] pathNames;
 
-    private static Prewitt prewitt = new Prewitt();
+    private Prewitt prewitt = new Prewitt();
 
     public static void main(String[] args){
         File f = new File("screenshots");
@@ -39,15 +40,23 @@ public class PostCutter {
             System.exit(1);
         }
 
-        setUpGui();
+        PostCutter postCutter = new PostCutter();
     }
 
-    private static void setUpGui(){
-        frame.setVisible(true);
-        frame.setSize(500, 500);
-        frame.setExtendedState(Frame.MAXIMIZED_BOTH); 
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public PostCutter(){
+        this.setTitle("EDGE DETECTOR");
+        this.setVisible(true);
+        this.setSize(500, 500);
+        this.setExtendedState(Frame.MAXIMIZED_BOTH); 
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        setUpGuiComponents();
+
+        this.add(panelButtons, BorderLayout.PAGE_END);
+        this.add(panelImages, BorderLayout.CENTER);
+    }
+
+    private void setUpGuiComponents(){
         buttonNext.addActionListener(e -> changeImage(1));
         buttonPrevious.addActionListener(e -> changeImage(-1));
         labelOrigin.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,15 +64,13 @@ public class PostCutter {
 
         panelButtons.add(buttonPrevious);
         panelButtons.add(buttonNext);
-        frame.add(panelButtons, BorderLayout.PAGE_END);
-
+        
         panelImages.setLayout(new GridLayout(1, 2));
         panelImages.add(labelOrigin);
         panelImages.add(labelChange);
-        frame.add(panelImages, BorderLayout.CENTER);
     }
 
-    private static void changeImage(int moveBy){
+    private void changeImage(int moveBy){
         fileIndex += moveBy;
         if(fileIndex < 0){
             fileIndex = pathNames.length - 1;
@@ -81,13 +88,13 @@ public class PostCutter {
         } 
     }
 
-    private static ImageIcon getResizedIcon(BufferedImage img, Dimension labelDimension){
+    private ImageIcon getResizedIcon(BufferedImage img, Dimension labelDimension){
         Dimension newDimension = getDimension(labelDimension, new Dimension(img.getWidth(), img.getHeight())); 
         Image dimg = img.getScaledInstance((int) newDimension.getWidth(), (int) newDimension.getHeight(), Image.SCALE_SMOOTH);
         return new ImageIcon(dimg);
     }
 
-    private static Dimension getDimension(Dimension labelDimension, Dimension imageDimension){
+    private Dimension getDimension(Dimension labelDimension, Dimension imageDimension){
         double newWidth = 0;
         double newHeight = 0;
         double ration;

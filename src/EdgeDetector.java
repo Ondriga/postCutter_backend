@@ -1,5 +1,8 @@
+package src;
+
 import java.awt.image.BufferedImage;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -8,6 +11,7 @@ public abstract class EdgeDetector{
     public abstract BufferedImage highlightEdge(String sourceImage);
 
     public static Mat getGrayScale(String sourceImage){
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat srcImg = Imgcodecs.imread(sourceImage);
         Mat grayImg = new Mat(srcImg.rows(), srcImg.cols(), srcImg.type());
 

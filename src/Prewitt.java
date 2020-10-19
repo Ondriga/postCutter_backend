@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.image.BufferedImage;
 
 public class Prewitt extends EdgeDetector {
