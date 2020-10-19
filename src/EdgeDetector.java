@@ -1,5 +1,3 @@
-package src;
-
 import java.awt.image.BufferedImage;
 
 import org.opencv.core.Core;
@@ -8,10 +6,17 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public abstract class EdgeDetector{
+
+    private String methodName;
+
+    public EdgeDetector(String methodName){
+        this.methodName = methodName;
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     public abstract BufferedImage highlightEdge(String sourceImage);
 
     public static Mat getGrayScale(String sourceImage){
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat srcImg = Imgcodecs.imread(sourceImage);
         Mat grayImg = new Mat(srcImg.rows(), srcImg.cols(), srcImg.type());
 
@@ -28,7 +33,16 @@ public abstract class EdgeDetector{
         } else {
             return null;
         }
-    
-        return new BufferedImage(mat.width(), mat.height(), type);
+        int imageDataLenght = mat.channels()*mat.rows()*mat.cols();
+        byte [] buffer = new byte[imageDataLenght];
+        mat.get(0, 0, buffer);
+        BufferedImage grayImage = new BufferedImage(mat.width(), mat.height(), type);
+        grayImage.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), buffer);
+
+        return grayImage;
+    }
+
+    public String getMethodName(){
+        return this.methodName;
     }
 }

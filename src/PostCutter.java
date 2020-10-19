@@ -1,7 +1,7 @@
-package src;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,17 +20,18 @@ import java.awt.Image;
 import java.awt.GridLayout;
 
 public class PostCutter extends JFrame{
-    private JButton buttonPrevious = new JButton("PREV");
-    private JButton buttonNext = new JButton("NEXT");
     private JLabel labelOrigin = new JLabel();
     private JLabel labelChange = new JLabel();
-    private JPanel panelButtons = new JPanel();
+    private JPanel panelButtonsPhoto = new JPanel();
     private JPanel panelImages = new JPanel();
+    private JLabel methodName = new JLabel();
+    private JPanel panelButtonsMeth = new JPanel();
 
     private int fileIndex = 0;
     private static String[] pathNames;
 
-    private Prewitt prewitt = new Prewitt();
+    private List<EdgeDetector> edgeMethods = new ArrayList<>();
+    private EdgeDetector edgeDetector;
 
     public static void main(String[] args){
         File f = new File("screenshots");
@@ -39,11 +40,13 @@ public class PostCutter extends JFrame{
             System.err.println("NO FILES");
             System.exit(1);
         }
-
         PostCutter postCutter = new PostCutter();
     }
 
     public PostCutter(){
+        edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
+        edgeDetector = edgeMethods.get(0);
+
         this.setTitle("EDGE DETECTOR");
         this.setVisible(true);
         this.setSize(500, 500);
@@ -52,22 +55,45 @@ public class PostCutter extends JFrame{
 
         setUpGuiComponents();
 
-        this.add(panelButtons, BorderLayout.PAGE_END);
+        this.add(methodName, BorderLayout.PAGE_START);
+
+        this.add(panelButtonsPhoto, BorderLayout.PAGE_END);
         this.add(panelImages, BorderLayout.CENTER);
+        this.add(panelButtonsMeth, BorderLayout.LINE_END);
     }
 
     private void setUpGuiComponents(){
+        JButton buttonPrevious = new JButton("PREV");
+        JButton buttonNext = new JButton("NEXT");
         buttonNext.addActionListener(e -> changeImage(1));
         buttonPrevious.addActionListener(e -> changeImage(-1));
+        panelButtonsPhoto.add(buttonPrevious);
+        panelButtonsPhoto.add(buttonNext);
+
+        for(int i=0; i<edgeMethods.size(); i++){
+            createMethodButton(edgeMethods.get(i).getMethodName(), i);
+        }
+
+        methodName.setText(edgeDetector.getMethodName());
+
+        methodName.setHorizontalAlignment(SwingConstants.CENTER);
         labelOrigin.setHorizontalAlignment(SwingConstants.CENTER);
         labelChange.setHorizontalAlignment(SwingConstants.CENTER);
-
-        panelButtons.add(buttonPrevious);
-        panelButtons.add(buttonNext);
-        
+         
         panelImages.setLayout(new GridLayout(1, 2));
         panelImages.add(labelOrigin);
         panelImages.add(labelChange);
+    }
+
+    private void changeMethod(int methodIndex){
+        edgeDetector = edgeMethods.get(methodIndex);
+        changeImage(0);
+    }
+
+    private void createMethodButton(String methodName, int methodIndex){
+        JButton button = new JButton(methodName);
+        button.addActionListener(e -> changeMethod(methodIndex));
+        panelButtonsMeth.add(button);
     }
 
     private void changeImage(int moveBy){
@@ -82,7 +108,7 @@ public class PostCutter extends JFrame{
         try {
             img = ImageIO.read(new File(path));
             labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
-            labelChange.setIcon(getResizedIcon(prewitt.highlightEdge(path), labelChange.getSize()));
+            labelChange.setIcon(getResizedIcon(edgeDetector.highlightEdge(path), labelChange.getSize()));
         } catch (IOException e) {
             e.printStackTrace();
         } 
