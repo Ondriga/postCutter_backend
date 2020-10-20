@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,6 +46,8 @@ public class PostCutter extends JFrame{
 
     public PostCutter(){
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
+        edgeMethods.add(new Sobel("SOBEL OPERATOR"));
+        edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
         edgeDetector = edgeMethods.get(0);
 
         this.setTitle("EDGE DETECTOR");
@@ -70,6 +73,7 @@ public class PostCutter extends JFrame{
         panelButtonsPhoto.add(buttonPrevious);
         panelButtonsPhoto.add(buttonNext);
 
+        panelButtonsMeth.setLayout(new BoxLayout(panelButtonsMeth, BoxLayout.PAGE_AXIS));
         for(int i=0; i<edgeMethods.size(); i++){
             createMethodButton(edgeMethods.get(i).getMethodName(), i);
         }
@@ -87,6 +91,7 @@ public class PostCutter extends JFrame{
 
     private void changeMethod(int methodIndex){
         edgeDetector = edgeMethods.get(methodIndex);
+        methodName.setText(edgeDetector.getMethodName());
         changeImage(0);
     }
 
