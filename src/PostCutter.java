@@ -73,6 +73,7 @@ public class PostCutter extends JFrame{
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
+        edgeMethods.add(new Canny("CANNY"));
         edgeDetector = edgeMethods.get(0);
 
         this.setTitle("EDGE DETECTOR");

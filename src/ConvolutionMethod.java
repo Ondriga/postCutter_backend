@@ -16,7 +16,7 @@ import org.opencv.imgproc.Imgproc;
  */
 public class ConvolutionMethod extends EdgeDetector {
     /// Kernel size constant
-    private static final int kernelSize = 1;
+    private static final int KERNELSIZE = 1;
     /// Matrix of kernel for detection vertical line
     private Mat kernelVertical;
     /// Matrix of kernel for detection horizontal line
@@ -28,7 +28,7 @@ public class ConvolutionMethod extends EdgeDetector {
      */
     public ConvolutionMethod(String methodName) {
         super(methodName);
-        this.kernelVertical = new Mat(kernelSize,kernelSize, CvType.CV_32F) {
+        this.kernelVertical = new Mat(KERNELSIZE,KERNELSIZE, CvType.CV_32F) {
             {
                 put(0,0,1);
             }

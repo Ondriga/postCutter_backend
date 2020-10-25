@@ -13,7 +13,7 @@ import org.opencv.core.Mat;
  */
 public class Prewitt extends ConvolutionMethod{
     /// Kernel size constant
-    private static final int kernelSize = 3;
+    private static final int KERNELSIZE = 3;
 
     /**
      * Constant
@@ -22,7 +22,7 @@ public class Prewitt extends ConvolutionMethod{
     public Prewitt(String methodName) {
         super(methodName);
 
-        Mat kernelVertical = new Mat(kernelSize,kernelSize, CvType.CV_32F) {
+        Mat kernelVertical = new Mat(KERNELSIZE,KERNELSIZE, CvType.CV_32F) {
             {
                 put(0,0,-1);
                 put(0,1,0);
@@ -37,7 +37,7 @@ public class Prewitt extends ConvolutionMethod{
                 put(2,2,1);
             }
         };
-        Mat kernelHorizontal = new Mat(kernelSize,kernelSize, CvType.CV_32F) {
+        Mat kernelHorizontal = new Mat(KERNELSIZE,KERNELSIZE, CvType.CV_32F) {
             {
                 put(0,0,-1);
                 put(0,1,-1);

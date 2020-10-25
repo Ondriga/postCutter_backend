@@ -13,7 +13,7 @@ import org.opencv.core.Mat;
  */
 public class Laplace extends ConvolutionMethod {
     /// Kernel size constant
-    private static final int kernelSize = 3;
+    private static final int KERNELSIZE = 3;
 
     /**
      * Constructor
@@ -22,7 +22,7 @@ public class Laplace extends ConvolutionMethod {
     public Laplace(String methodName) {
         super(methodName);
 
-        Mat kernelVertical = new Mat(kernelSize,kernelSize, CvType.CV_32F) {
+        Mat kernelVertical = new Mat(KERNELSIZE,KERNELSIZE, CvType.CV_32F) {
             {
                 put(0,0,0);
                 put(0,1,1);
@@ -37,7 +37,7 @@ public class Laplace extends ConvolutionMethod {
                 put(2,2,0);
             }
         };
-        Mat kernelHorizontal = new Mat(kernelSize,kernelSize, CvType.CV_32F) {
+        Mat kernelHorizontal = new Mat(KERNELSIZE,KERNELSIZE, CvType.CV_32F) {
             {
                 put(0,0,1);
                 put(0,1,1);
