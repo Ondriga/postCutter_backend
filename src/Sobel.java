@@ -1,9 +1,24 @@
+/*
+ * Source code for the backend of Bachelor thesis.
+ * Sobel class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+/**
+ * Extended ConvolutionMethod. Add Sobel operator for convolution edge detector.
+ */
 public class Sobel extends ConvolutionMethod{
+    /// Kernel size constant
     private static final int kernelSize = 3;
 
+    /**
+     * Constructor
+     * @param methodName method name
+     */
     public Sobel(String methodName) {
         super(methodName);
 

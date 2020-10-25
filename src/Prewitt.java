@@ -1,9 +1,24 @@
+/*
+ * Source code for the backend of Bachelor thesis.
+ * Prewitt class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+/**
+ * Extended ConvolutionMethod. Add Prewitt operator for convolution edge detector.
+ */
 public class Prewitt extends ConvolutionMethod{
+    /// Kernel size constant
     private static final int kernelSize = 3;
 
+    /**
+     * Constant
+     * @param methodName method name
+     */
     public Prewitt(String methodName) {
         super(methodName);
 
