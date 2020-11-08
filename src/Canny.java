@@ -35,9 +35,6 @@ public class Canny extends EdgeDetector {
 
         Imgproc.Canny(srcMat, destMat, THRESHOLD1, THRESHOLD2);
 
-        LineHandler l = new LineHandler(); //TODO debug
-        l.test(destMat); //TODO debug
-
         return mat2BufferedImage(destMat);
     }
     
