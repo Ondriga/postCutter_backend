@@ -5,8 +5,6 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
-import java.awt.image.BufferedImage;
-
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -45,9 +43,9 @@ public class Laplace extends EdgeDetector {
     }
 
     @Override
-    public BufferedImage highlightEdge(String sourceImage) {
+    public Mat highlightEdge(String sourceImage) {
         Convolution convolution = new Convolution();
         Mat destMat = convolution.doConvolution(getGrayScale(sourceImage), this.kernel);
-        return mat2BufferedImage(destMat);
+        return destMat;
     }
 }

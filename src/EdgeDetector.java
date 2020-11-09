@@ -34,7 +34,7 @@ public abstract class EdgeDetector{
      * @param sourceImage picture path
      * @return modified picture with edge highlight in BufferImage format
      */
-    public abstract BufferedImage highlightEdge(String sourceImage);
+    public abstract Mat highlightEdge(String sourceImage);
 
     /**
      * Change color picture into grayscale picture.
@@ -47,29 +47,6 @@ public abstract class EdgeDetector{
 
         Imgproc.cvtColor(srcImg, grayImg, Imgproc.COLOR_RGB2GRAY);
         return grayImg;
-    }
-
-    /**
-     * Convert "Mat" into "BufferedImage"
-     * @param mat picture stored like matrix
-     * @return picture stored like BufferedImage
-     */
-    public static BufferedImage mat2BufferedImage(Mat mat){
-        int type = 0;
-        if (mat.channels() == 1) {
-            type = BufferedImage.TYPE_BYTE_GRAY;
-        } else if (mat.channels() == 3) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        } else {
-            return null;
-        }
-        int imageDataLenght = mat.channels()*mat.rows()*mat.cols();
-        byte [] buffer = new byte[imageDataLenght];
-        mat.get(0, 0, buffer);
-        BufferedImage grayImage = new BufferedImage(mat.width(), mat.height(), type);
-        grayImage.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), buffer);
-
-        return grayImage;
     }
 
     /**

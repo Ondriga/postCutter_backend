@@ -19,7 +19,7 @@ public class LineHandler {
             for (int j=0; j<cols; j++)
             {
                 double[] data = picture.get(i, j);
-                if(data[0] == 255){
+                if(data[0] == 0){
                     int nextPixel = 0;
                     if(i != rows-1){
                         nextPixel = (int) picture.get(i+1, j)[0];
@@ -59,11 +59,19 @@ public class LineHandler {
                 return;
             }
         }
-        if(nextPixel == 255){
+        if(nextPixel == 0){
             MyLine tmp = MyLine.createLine(coordinate, coordinate);
             if(tmp != null){
                 lines.add(tmp);
             }
         }
+    }
+
+    public List<MyLine> getHorizontalLines(){
+        return this.horizontalLines;
+    }
+
+    public List<MyLine> getVerticalLines(){
+        return this.verticalLines;
     }
 }

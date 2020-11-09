@@ -5,7 +5,6 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
-import java.awt.image.BufferedImage;
 
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -29,13 +28,13 @@ public class Canny extends EdgeDetector {
     }
 
     @Override
-    public BufferedImage highlightEdge(String sourceImage) {
+    public Mat highlightEdge(String sourceImage) {
         Mat srcMat = getGrayScale(sourceImage);
         Mat destMat = new Mat(srcMat.rows(), srcMat.cols(), srcMat.type());
 
         Imgproc.Canny(srcMat, destMat, THRESHOLD1, THRESHOLD2);
 
-        return mat2BufferedImage(destMat);
+        return destMat;
     }
     
 }
