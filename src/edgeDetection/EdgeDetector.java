@@ -5,6 +5,8 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
+package edgeDetection;
+
 import java.awt.image.BufferedImage;
 
 import org.opencv.core.Core;

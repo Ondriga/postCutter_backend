@@ -1,3 +1,4 @@
+package line;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class LineHandler {
     private List<MyLine> horizontalLines = new ArrayList<>();
 
     //TODO work only with grayscale
-    private void findLines(Mat picture){
+    public void findLines(Mat picture){
         int rows = picture.rows();
         int cols = picture.cols();
 

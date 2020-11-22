@@ -1,3 +1,4 @@
+package line;
 public class MyLine {
     private Coordinate startPoint;
     private Coordinate endPoint;

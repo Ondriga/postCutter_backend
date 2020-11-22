@@ -1,3 +1,4 @@
+package line;
 public class Coordinate {
     private final int x;
     private final int y;
