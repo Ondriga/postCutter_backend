@@ -35,7 +35,7 @@ public class Prewitt extends EdgeDetector {
                 put(0, 1, 0);
                 put(0, 2, 1);
 
-                put(1, 0 - 1);
+                put(1, 0, -1);
                 put(1, 1, 0);
                 put(1, 2, 1);
 
