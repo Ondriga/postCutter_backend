@@ -8,15 +8,20 @@ public class TestRunner {
       int fails = printResult("COORDINATE TESTS", result);
 
       result = JUnitCore.runClasses(MyLineTests.class);
-      fails = printResult("MyLine TESTS", result);
+      fails += printResult("MyLine TESTS", result);
+
+      result = JUnitCore.runClasses(LineHandlerTests.class);
+      fails += printResult("LineHandler TESTS", result);
 
       System.out.println();
       System.out.println();
+      System.out.println("----------------------------");
       if(fails == 0){
          System.out.println("All tests ended successful.");
       }else{
          System.out.println("Number of failed tests: " + fails);
-      }    
+      }
+      System.out.println("----------------------------");
    }
 
    private static int printResult(String testName, Result result){

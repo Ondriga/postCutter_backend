@@ -16,12 +16,14 @@ public class MyLineTests {
 
     MyLine line1 = MyLine.createLine(coor1, coor2);
     MyLine line2 = MyLine.createLine(coor3, coor4);
+    MyLine linedot = MyLine.createLine(coor1, coor1);
 
     @Test
     public void createMyLineTest(){
         assertNotNull(line1);
         assertNotNull(line2);
         assertNull(MyLine.createLine(coor1, coor3));
+        assertNotNull(linedot);
     }
 
     @Test
@@ -68,5 +70,15 @@ public class MyLineTests {
         assertFalse(line2.extendByOne(new Coordinate(9, 3)));
         assertTrue(line2.extendByOne(new Coordinate(5, 3)));
         assertTrue(line2.getStartPoint().equals(new Coordinate(5, 3)));
+
+        assertTrue(linedot.extendByOne(new Coordinate(5, 21)));
+        assertTrue(linedot.getStartPoint().equals(coor1));
+        assertTrue(linedot.getEndPoint().equals(new Coordinate(5, 21)));
+
+        MyLine lineDotHorizontal = MyLine.createLine(coor1, coor1);
+
+        assertTrue(lineDotHorizontal.extendByOne(new Coordinate(6, 20)));
+        assertTrue(lineDotHorizontal.getStartPoint().equals(coor1));
+        assertTrue(lineDotHorizontal.getEndPoint().equals(new Coordinate(6, 20)));
     }
 }
