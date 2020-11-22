@@ -5,6 +5,9 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
+import edgeDetection.*;
+import line.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import org.opencv.core.Mat;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -36,6 +41,8 @@ public class PostCutter extends JFrame{
     private JLabel labelOrigin = new JLabel();
     /// Component for display changed picture
     private JLabel labelChange = new JLabel();
+    /// Component for view lines or rectangles in pictures
+    private JLabel labelLines = new JLabel();
     /// Panel contain buttons "next" and "previous"
     private JPanel panelButtonsPhoto = new JPanel();
     /// Panel contain labels "labelOrigin" and "labelChange"
@@ -114,9 +121,10 @@ public class PostCutter extends JFrame{
         labelOrigin.setHorizontalAlignment(SwingConstants.CENTER);
         labelChange.setHorizontalAlignment(SwingConstants.CENTER);
          
-        panelImages.setLayout(new GridLayout(1, 2));
+        panelImages.setLayout(new GridLayout(1, 3));
         panelImages.add(labelOrigin);
         panelImages.add(labelChange);
+        panelImages.add(labelLines);
     }
 
     /**
@@ -156,10 +164,46 @@ public class PostCutter extends JFrame{
         try {
             img = ImageIO.read(new File(path));
             labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
-            labelChange.setIcon(getResizedIcon(edgeDetector.highlightEdge(path), labelChange.getSize()));
+            Mat pictureChange = edgeDetector.highlightEdge(path);
+            labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
+
+            // TODO treba vyriesit zobrazovanie ciar
+            labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
+
         } catch (IOException e) {
             e.printStackTrace();
         } 
+    }
+
+    private BufferedImage highlightLines(Mat picture){
+        Mat linesMat = new Mat(picture.rows(), picture.cols(), picture.type());
+        
+        for (int i=0; i<linesMat.rows(); i++)
+        {
+            for (int j=0; j<linesMat.cols(); j++)
+            {
+                double[] data = {255};
+                linesMat.put(i, j, data); //Puts element back into matrix
+            }
+        }
+
+        LineHandler lineHandler = new LineHandler();
+        lineHandler.findLines(picture);
+
+        for(MyLine line : lineHandler.getHorizontalLines()){
+            for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
+                double[] data = {0};
+                linesMat.put(line.getStartPoint().getY(), i, data);
+            }
+        }
+        for(MyLine line : lineHandler.getVerticalLines()){
+            for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
+                double[] data = {0};
+                linesMat.put(i, line.getStartPoint().getX(), data);
+            }
+        }
+
+        return mat2BufferedImage(linesMat);
     }
 
     /**
@@ -197,5 +241,28 @@ public class PostCutter extends JFrame{
         Dimension dimension = new Dimension();
         dimension.setSize(newWidth, newHeight);
         return dimension;
+    }
+
+    /**
+     * Convert "Mat" into "BufferedImage"
+     * @param mat picture stored like matrix
+     * @return picture stored like BufferedImage
+     */
+    public static BufferedImage mat2BufferedImage(Mat mat){
+        int type = 0;
+        if (mat.channels() == 1) {
+            type = BufferedImage.TYPE_BYTE_GRAY;
+        } else if (mat.channels() == 3) {
+            type = BufferedImage.TYPE_3BYTE_BGR;
+        } else {
+            return null;
+        }
+        int imageDataLength = mat.channels()*mat.rows()*mat.cols();
+        byte [] buffer = new byte[imageDataLength];
+        mat.get(0, 0, buffer);
+        BufferedImage grayImage = new BufferedImage(mat.width(), mat.height(), type);
+        grayImage.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), buffer);
+
+        return grayImage;
     }
 }
