@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import java.awt.BorderLayout;
@@ -167,7 +168,6 @@ public class PostCutter extends JFrame{
             Mat pictureChange = edgeDetector.highlightEdge(path);
             labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
 
-            // TODO treba vyriesit zobrazovanie ciar
             labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
 
         } catch (IOException e) {
@@ -176,30 +176,30 @@ public class PostCutter extends JFrame{
     }
 
     private BufferedImage highlightLines(Mat picture){
-        Mat linesMat = new Mat(picture.rows(), picture.cols(), picture.type());
+        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U);
         
         for (int i=0; i<linesMat.rows(); i++)
         {
             for (int j=0; j<linesMat.cols(); j++)
             {
-                double[] data = {255};
-                linesMat.put(i, j, data); //Puts element back into matrix
+                linesMat.put(i, j, 255); //Puts element back into matrix
             }
         }
-
+        
         LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
-
         for(MyLine line : lineHandler.getHorizontalLines()){
-            for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                double[] data = {0};
-                linesMat.put(line.getStartPoint().getY(), i, data);
+            if(line.length() >= 540){
+                for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
+                    linesMat.put(line.getStartPoint().getY(), i, 0);
+                }
             }
         }
         for(MyLine line : lineHandler.getVerticalLines()){
-            for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                double[] data = {0};
-                linesMat.put(i, line.getStartPoint().getX(), data);
+            if(line.length() >= 960){
+                for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
+                    linesMat.put(i, line.getStartPoint().getX(), 0);
+                }
             }
         }
 

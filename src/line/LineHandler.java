@@ -20,12 +20,13 @@ public class LineHandler {
             for (int j=0; j<cols; j++)
             {
                 double[] data = picture.get(i, j);
-                if(data[0] == 0){
+                if(data[0] == 255){
                     int nextPixel = 0;
                     if(i != rows-1){
                         nextPixel = (int) picture.get(i+1, j)[0];
                     }
                     addLine(new Coordinate(j, i), nextPixel, this.verticalLines);
+                    nextPixel = 0;
                     if(j != cols-1){
                         nextPixel = (int) picture.get(i, j+1)[0];
                     }
@@ -55,12 +56,10 @@ public class LineHandler {
     }
 
     private void addLine(Coordinate coordinate, int nextPixel, List<MyLine> lines){
-        for(MyLine line : lines){
-            if(line.extendByOne(coordinate)){
-                return;
-            }
+        if(lines.get(lines.size()-1).extendByOne(coordinate)){
+            return;
         }
-        if(nextPixel == 0){
+        if(nextPixel == 255){
             MyLine tmp = MyLine.createLine(coordinate, coordinate);
             if(tmp != null){
                 lines.add(tmp);

@@ -39,32 +39,45 @@ public class MyLine {
         }
     }
 
-    public boolean extendByOne(Coordinate coordinate){
-        if(this.startPoint.getX() == this.endPoint.getX()){
-            if(this.startPoint.getX() != coordinate.getX()){
-                return false;
-            }
-            if((this.startPoint.getY() - 1) == coordinate.getY()){
+    private boolean extendByOneXway(Coordinate coordinate){
+        if(this.startPoint.getY() == coordinate.getY()){
+            if(this.startPoint.getX()-1 == coordinate.getX()){
                 this.startPoint = coordinate;
                 return true;
-            }
-            if((this.endPoint.getY() + 1) == coordinate.getY()){
-                this.endPoint = coordinate;
-                return true;
-            }
-        }else{
-            if(this.startPoint.getY() != coordinate.getY()){
-                return false;
-            }
-            if((this.startPoint.getX() - 1) == coordinate.getX()){
-                this.startPoint = coordinate;
-                return true;
-            }
-            if((this.endPoint.getX() + 1) == coordinate.getX()){
+            }else if(this.endPoint.getX()+1 == coordinate.getX()){
                 this.endPoint = coordinate;
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean extendByOneYway(Coordinate coordinate){
+        if(this.startPoint.getX() == coordinate.getX()){
+            if(this.startPoint.getY()-1 == coordinate.getY()){
+                this.startPoint = coordinate;
+                return true;
+            }else if(this.endPoint.getY()+1 == coordinate.getY()){
+                this.endPoint = coordinate;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean extendByOne(Coordinate coordinate){
+        if(this.startPoint.equals(this.endPoint)){
+            if(!extendByOneXway(coordinate)){
+                return extendByOneYway(coordinate);
+            }else{
+                return true;
+            }
+        }
+
+        if(this.startPoint.getX() == this.endPoint.getX()){
+            return extendByOneYway(coordinate);
+        }else{
+            return extendByOneXway(coordinate);
+        }
     }
 }
