@@ -18,7 +18,7 @@ public class Canny extends EdgeDetector {
     /// Constant for low threshold of canny method
     private static final int THRESHOLD1 = 40;
     /// Constant for high threshold of canny method
-    private static final int THRESHOLD2 = 40*3;
+    private static final int THRESHOLD2 = THRESHOLD1*3;
 
     /**
      * Constructor
