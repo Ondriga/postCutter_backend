@@ -11,7 +11,7 @@ public class CoordinateTests {
 
     @Test
     public void testCoordinateEquals(){
-        assertTrue(coord1.equals(coord2));
-        assertFalse(coord1.equals(coord3));
+        assertTrue("Coordinates have the same value of x and y.", coord1.equals(coord2));
+        assertFalse("Coordinates have different value x or y. [coordinate1(4, 5) coordinate2(5, 4)]", coord1.equals(coord3));
     }
 }
