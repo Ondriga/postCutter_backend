@@ -1,38 +1,89 @@
 package line;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.opencv.core.Mat;
 
 public class LineHandler {
-    private List<MyLine> verticalLines = new ArrayList<>();
-    private List<MyLine> horizontalLines = new ArrayList<>();
+    private List<MyLine> verticalLines = new LinkedList<>();
+    private List<MyLine> horizontalLines = new LinkedList<>();
+
+    private static final int TRASH_HOLD = 85;
 
     //TODO work only with grayscale
     public void findLines(Mat picture){
         int rows = picture.rows();
         int cols = picture.cols();
+        Mat pictureClone = picture.clone();
 
         addPicturesEdges(rows, cols);
 
-        for (int i=0; i<rows; i++)
-        {
-            for (int j=0; j<cols; j++)
-            {
-                double[] data = picture.get(i, j);
-                if(data[0] == 255){
-                    int nextPixel = 0;
-                    if(i != rows-1){
-                        nextPixel = (int) picture.get(i+1, j)[0];
-                    }
-                    addLine(new Coordinate(j, i), nextPixel, this.verticalLines);
-                    nextPixel = 0;
-                    if(j != cols-1){
-                        nextPixel = (int) picture.get(i, j+1)[0];
-                    }
-                    addLine(new Coordinate(j, i), nextPixel, this.horizontalLines);
+        // horizontal lines
+        for(int j=0; j<cols; j++){
+            for(int i=0; i<rows; i++){
+                if(picture.get(i, j)[0] > TRASH_HOLD){
+                    findHorizontalLine(new Coordinate(j, i), picture);
                 }
             }
+        }
+
+        // vertical lines
+        for (int i=0; i<rows; i++){
+            for (int j=0; j<cols; j++){
+                if(pictureClone.get(i, j)[0] > TRASH_HOLD){
+                    findVerticalLine(new Coordinate(j, i), pictureClone);
+                }
+            }
+        }
+    }
+
+    private void findHorizontalLine(Coordinate start, Mat picture){
+        int height = picture.rows();
+        int width = picture.cols();
+        Coordinate end = start;
+        int startX = start.getX();
+        int startY = start.getY();
+        for(int x = startX+1; x < width; x++){
+            if(picture.get(startY, x)[0] > TRASH_HOLD){
+                picture.put(startY, x, 0);     
+            }else if(startY > 0 && picture.get(startY-1, x)[0] > TRASH_HOLD){
+                picture.put(startY-1, x, 0);
+            }else if(startY < height-1 && picture.get(startY+1, x)[0] > TRASH_HOLD){ 
+                picture.put(startY+1, x, 0);
+            }else{
+                break;
+            }
+            end = new Coordinate(x, startY);
+        }
+        MyLine line = MyLine.createLine(start, end);
+        if(line != null && line.length() >= 2){
+            picture.put(startY, startX, 0);
+            this.horizontalLines.add(line);
+        }
+    }
+
+    private void findVerticalLine(Coordinate start, Mat picture){
+        int height = picture.rows();
+        int width = picture.cols();
+        Coordinate end = start;
+        int startX = start.getX();
+        int startY = start.getY();
+        for(int y = startY+1; y < height; y++){
+            if(picture.get(y, startX)[0] > TRASH_HOLD){
+                picture.put(y, startX, 0);
+            }else if(startX > 0 && picture.get(y, startX-1)[0] > TRASH_HOLD){
+                picture.put(y, startX-1, 0);
+            }else if(startX < width-1 && picture.get(y, startX+1)[0] > TRASH_HOLD){ 
+                picture.put(y, startX+1, 0);
+            }else{
+                break;
+            }
+            end = new Coordinate(startX, y);
+        }
+        MyLine line = MyLine.createLine(start, end);
+        if(line != null && line.length() >= 2){
+            picture.put(startY, startX, 0);
+            this.verticalLines.add(line);
         }
     }
 
@@ -52,18 +103,6 @@ public class LineHandler {
         tmp = MyLine.createLine(new Coordinate(0, rows-1), new Coordinate(cols-1, rows-1));
         if(tmp != null){
             this.horizontalLines.add(tmp);
-        }
-    }
-
-    private void addLine(Coordinate coordinate, int nextPixel, List<MyLine> lines){
-        if(lines.get(lines.size()-1).extendByOne(coordinate)){
-            return;
-        }
-        if(nextPixel == 255){
-            MyLine tmp = MyLine.createLine(coordinate, coordinate);
-            if(tmp != null){
-                lines.add(tmp);
-            }
         }
     }
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
 import org.opencv.core.Core;
 
@@ -18,12 +19,15 @@ public class LineHandlerTests {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    Mat mat = new Mat(4, 4, CvType.CV_8U);
+    Mat mat = new Mat(4, 4, CvType.CV_8U, new Scalar(0));
     LineHandler lineHandler = new LineHandler();
 
     @Test
     public void horizontalLineTest(){
-        mat.put(0, 0, 255, 0, 255, 255, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0);
+        mat.put(0, 2, 255);
+        mat.put(1, 0, 255); 
+        mat.put(1, 1, 255); 
+        mat.put(1, 3, 255); 
         lineHandler.findLines(mat);
         
         List<MyLine> list = lineHandler.getHorizontalLines();
@@ -42,7 +46,10 @@ public class LineHandlerTests {
 
     @Test
     public void verticalLineTest(){
-        mat.put(0, 255, 0, 0, 0, 0, 255, 0, 0, 255, 0, 0, 0, 255, 0, 0);
+        mat.put(0, 1, 255);
+        mat.put(1, 2, 255); 
+        mat.put(2, 1, 255); 
+        mat.put(3, 1, 255); 
         lineHandler.findLines(mat);
 
         List<MyLine> list = lineHandler.getVerticalLines();
@@ -61,7 +68,10 @@ public class LineHandlerTests {
 
     @Test
     public void veticalHorizontalLinesTest(){
-        mat.put(0, 0, 0, 0, 0, 0, 255, 0, 255, 255, 255, 0, 0, 0, 0, 0);
+        mat.put(1, 2, 255);
+        mat.put(2, 0, 255); 
+        mat.put(2, 1, 255); 
+        mat.put(2, 2, 255);
         lineHandler.findLines(mat);
 
         List<MyLine> listHorizontal = lineHandler.getHorizontalLines();
@@ -73,7 +83,7 @@ public class LineHandlerTests {
         assertTrue("Start point of third horizontal line wasn`t [0, 2]", listHorizontal.get(2).getStartPoint().equals(new Coordinate(0, 2)));
         assertTrue("End point of third horizontal line wasn`t [2, 2]", listHorizontal.get(2).getEndPoint().equals(new Coordinate(2, 2)));
 
-        assertTrue("Start point of third vertical line wasn`t [2, 1]", listHorizontal.get(2).getStartPoint().equals(new Coordinate(2, 1)));
-        assertTrue("End point of third vertical line wasn`t [2, 2]", listHorizontal.get(2).getEndPoint().equals(new Coordinate(2, 2)));
+        assertTrue("Start point of third vertical line wasn`t [2, 1]", listVertical.get(2).getStartPoint().equals(new Coordinate(2, 1)));
+        assertTrue("End point of third vertical line wasn`t [2, 2]", listVertical.get(2).getEndPoint().equals(new Coordinate(2, 2)));
     }
 }

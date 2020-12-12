@@ -25,6 +25,7 @@ import javax.swing.WindowConstants;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -169,13 +170,14 @@ public class PostCutter extends JFrame{
             labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
 
             labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
+            //labelLines.setIcon(getResizedIcon(highlightLinesAllMethods(path, pictureChange), labelLines.getSize()));
 
         } catch (IOException e) {
             e.printStackTrace();
         } 
     }
 
-    private BufferedImage highlightLines(Mat picture){
+    private BufferedImage highlightLinesAllMethods(String originalPicture, Mat picture){
         Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U);
         
         for (int i=0; i<linesMat.rows(); i++)
@@ -187,16 +189,41 @@ public class PostCutter extends JFrame{
         }
         
         LineHandler lineHandler = new LineHandler();
+        for(EdgeDetector method : this.edgeMethods){
+            lineHandler.findLines(method.highlightEdge(originalPicture));
+            for(MyLine line : lineHandler.getHorizontalLines()){
+                if(line.length() >= 270){
+                    for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
+                        linesMat.put(line.getStartPoint().getY(), i, 0);
+                    }
+                }
+            }
+            for(MyLine line : lineHandler.getVerticalLines()){
+                if(line.length() >= 480){
+                    for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
+                        linesMat.put(i, line.getStartPoint().getX(), 0);
+                    }
+                }
+            }
+        }
+
+        return mat2BufferedImage(linesMat);
+    }
+
+    private BufferedImage highlightLines(Mat picture){
+        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+        
+        LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
         for(MyLine line : lineHandler.getHorizontalLines()){
-            if(line.length() >= 540){
+            if(line.length() >= 270){
                 for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
                     linesMat.put(line.getStartPoint().getY(), i, 0);
                 }
             }
         }
         for(MyLine line : lineHandler.getVerticalLines()){
-            if(line.length() >= 960){
+            if(line.length() >= 480){
                 for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
                     linesMat.put(i, line.getStartPoint().getX(), 0);
                 }
