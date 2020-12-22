@@ -7,6 +7,7 @@
 
 import edgeDetection.*;
 import line.*;
+import rectangle.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,31 +179,19 @@ public class PostCutter extends JFrame{
     }
 
     private BufferedImage highlightLinesAllMethods(String originalPicture, Mat picture){
-        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U);
-        
-        for (int i=0; i<linesMat.rows(); i++)
-        {
-            for (int j=0; j<linesMat.cols(); j++)
-            {
-                linesMat.put(i, j, 255); //Puts element back into matrix
-            }
-        }
+        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
         
         LineHandler lineHandler = new LineHandler();
         for(EdgeDetector method : this.edgeMethods){
             lineHandler.findLines(method.highlightEdge(originalPicture));
             for(MyLine line : lineHandler.getHorizontalLines()){
-                if(line.length() >= 270){
-                    for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                        linesMat.put(line.getStartPoint().getY(), i, 0);
-                    }
+                for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
+                    linesMat.put(line.getStartPoint().getY(), i, 80);
                 }
             }
             for(MyLine line : lineHandler.getVerticalLines()){
-                if(line.length() >= 480){
-                    for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                        linesMat.put(i, line.getStartPoint().getX(), 0);
-                    }
+                for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
+                    linesMat.put(i, line.getStartPoint().getX(), 80);
                 }
             }
         }
@@ -216,17 +205,27 @@ public class PostCutter extends JFrame{
         LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
         for(MyLine line : lineHandler.getHorizontalLines()){
-            if(line.length() >= 270){
-                for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                    linesMat.put(line.getStartPoint().getY(), i, 0);
-                }
+            for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
+                linesMat.put(line.getStartPoint().getY(), i, 80);
             }
         }
         for(MyLine line : lineHandler.getVerticalLines()){
-            if(line.length() >= 480){
-                for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                    linesMat.put(i, line.getStartPoint().getX(), 0);
-                }
+            for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
+                linesMat.put(i, line.getStartPoint().getX(), 80);
+            }
+        }
+
+        RectangleHandler rectangleHandler = new RectangleHandler();
+        MyRectangle rectangle = rectangleHandler.getRectangle(lineHandler.getHorizontalLines(), picture.cols()-1, picture.rows());
+
+        if(rectangle != null){
+            for(int i = rectangle.getCornerA().getX(); i <= rectangle.getCornerB().getX(); i++){
+                linesMat.put(rectangle.getCornerA().getY(), i, 0);
+                linesMat.put(rectangle.getCornerB().getY(), i, 0);
+            }
+            for(int i = rectangle.getCornerA().getY(); i <= rectangle.getCornerB().getY(); i++){
+                linesMat.put(i, rectangle.getCornerA().getX(), 0);
+                linesMat.put(i, rectangle.getCornerB().getX(), 0);
             }
         }
 
