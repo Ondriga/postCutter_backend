@@ -1,9 +1,12 @@
-package line;
+package postCutter.cutting.geometricShapes.line;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.opencv.core.Mat;
+
+import postCutter.cutting.geometricShapes.Coordinate;
 
 public final class LineHandler {
     private List<VerticalLine> verticalLines = new LinkedList<>();

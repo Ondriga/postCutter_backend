@@ -5,7 +5,7 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
-package edgeDetection;
+package postCutter.edgeDetection;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;

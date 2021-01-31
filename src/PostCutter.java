@@ -5,9 +5,9 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
-import edgeDetection.*;
-import line.*;
-import rectangle.*;
+import postCutter.edgeDetection.*;
+import postCutter.cutting.geometricShapes.line.*;
+import postCutter.cutting.geometricShapes.rectangle.*;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package rectangle;
+package postCutter.cutting.geometricShapes.rectangle;
 
-import line.Coordinate;
+import postCutter.cutting.geometricShapes.Coordinate;
 
 public class MyRectangle {
     private Coordinate cornerA;

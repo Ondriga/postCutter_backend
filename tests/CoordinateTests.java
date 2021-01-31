@@ -2,7 +2,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import line.Coordinate;
+import postCutter.cutting.geometricShapes.Coordinate;
 
 public class CoordinateTests {
     Coordinate coord1 = new Coordinate(4, 5);

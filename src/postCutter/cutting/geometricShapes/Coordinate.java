@@ -1,4 +1,5 @@
-package line;
+package postCutter.cutting.geometricShapes;
+
 public class Coordinate {
     private final int x;
     private final int y;

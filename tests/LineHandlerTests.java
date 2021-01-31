@@ -1,6 +1,6 @@
-import line.Coordinate;
-import line.LineHandler;
-import line.MyLine;
+import postCutter.cutting.geometricShapes.Coordinate;
+import postCutter.cutting.geometricShapes.line.LineHandler;
+import postCutter.cutting.geometricShapes.line.MyLine;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

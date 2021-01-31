@@ -1,5 +1,8 @@
-package line;
-public abstract class MyLine{
+package postCutter.cutting.geometricShapes.line;
+
+import postCutter.cutting.geometricShapes.Coordinate;
+
+public abstract class MyLine {
     private Coordinate startPoint;
     private Coordinate endPoint;
 

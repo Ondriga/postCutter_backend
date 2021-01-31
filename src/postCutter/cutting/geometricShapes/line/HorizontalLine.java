@@ -1,6 +1,8 @@
-package line;
+package postCutter.cutting.geometricShapes.line;
 
-public class HorizontalLine extends MyLine implements Comparable<HorizontalLine>{
+import postCutter.cutting.geometricShapes.Coordinate;
+
+public class HorizontalLine extends MyLine implements Comparable<HorizontalLine> {
     private HorizontalLine(Coordinate startPoint, Coordinate endPoint){
         super(startPoint, endPoint);
     }
