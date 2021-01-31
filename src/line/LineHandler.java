@@ -45,8 +45,8 @@ public final class LineHandler {
         Coordinate end = start;
         int startX = start.getX();
         int startY = start.getY();
-        int emptyRangeCounter = 0;
-        for(int x = startX+1; x < width; x++){
+        int emptyRangeCounter = 1;
+        for(int x = startX; x < width; x++){
             if(picture.get(startY, x)[0] > TRASH_HOLD){
                 picture.put(startY, x, 0);     
             }else if(startY > 0 && picture.get(startY-1, x)[0] > TRASH_HOLD){
@@ -54,16 +54,16 @@ public final class LineHandler {
             }else if(startY < height-1 && picture.get(startY+1, x)[0] > TRASH_HOLD){ 
                 picture.put(startY+1, x, 0);
             }else{
-                if(emptyRangeCounter++ >= ALLOW_EMPTY_RANGE){
+                if(emptyRangeCounter >= ALLOW_EMPTY_RANGE){
                     break;
                 }
+                emptyRangeCounter++;
+                continue;
             }
             end = new Coordinate(x, startY);
+            emptyRangeCounter = 1;
         }
         HorizontalLine line = HorizontalLine.createLine(start, end);
-        if(line.length() > 1){
-            picture.put(startY, startX, 0);
-        }
         if(line != null && line.length() >= width/3){
             this.horizontalLines.add(line);
         }
@@ -75,8 +75,8 @@ public final class LineHandler {
         Coordinate end = start;
         int startX = start.getX();
         int startY = start.getY();
-        int emptyRangeCounter = 0;
-        for(int y = startY+1; y < height; y++){
+        int emptyRangeCounter = 1;
+        for(int y = startY; y < height; y++){
             if(picture.get(y, startX)[0] > TRASH_HOLD){
                 picture.put(y, startX, 0);
             }else if(startX > 0 && picture.get(y, startX-1)[0] > TRASH_HOLD){
@@ -84,16 +84,16 @@ public final class LineHandler {
             }else if(startX < width-1 && picture.get(y, startX+1)[0] > TRASH_HOLD){ 
                 picture.put(y, startX+1, 0);
             }else{
-                if(emptyRangeCounter++ >= ALLOW_EMPTY_RANGE){
+                if(emptyRangeCounter >= ALLOW_EMPTY_RANGE){
                     break;
                 }
+                emptyRangeCounter++;
+                continue;
             }
             end = new Coordinate(startX, y);
+            emptyRangeCounter = 1;
         }
         VerticalLine line = VerticalLine.createLine(start, end);
-        if(line.length() > 1){
-            picture.put(startY, startX, 0);
-        }
         if(line != null && line.length() >= height/4){
             this.verticalLines.add(line);
         }

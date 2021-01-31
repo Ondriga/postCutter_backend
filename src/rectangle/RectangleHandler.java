@@ -55,16 +55,16 @@ public final class RectangleHandler {
         return rightLineX <= maxX && rightLineX > maxX - TRASH_HOLD;
     }
 
-    private boolean isInInterval(int minX, int maxX, int leftLineX, int rightLineX){
-        return isLeftXCorrect(minX, leftLineX) || isRightXCorrect(maxX, rightLineX);
-    }
-
     private int getYLimit(int maxX, List<MyLine> lines){
+        int limitY = -1;
         for(MyLine line : lines){
-            if(isInInterval(MIN_X, maxX, line.getStartPoint().getX(), line.getEndPoint().getX())){
+            if(limitY == -1 && (isLeftXCorrect(MIN_X, line.getStartPoint().getX()) || isRightXCorrect(maxX, line.getEndPoint().getX()))){
+                limitY = line.getStartPoint().getY();
+            }
+            if(isLeftXCorrect(MIN_X, line.getStartPoint().getX()) && isRightXCorrect(maxX, line.getEndPoint().getX())){
                 return line.getStartPoint().getY();
             }
         }
-        return -1;
+        return limitY;
     }
 }

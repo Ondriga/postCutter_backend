@@ -31,7 +31,7 @@ public class HorizontalLine extends MyLine implements Comparable<HorizontalLine>
 
     @Override
     public int length() {
-        return this.getEndPoint().getX() - this.getStartPoint().getX();
+        return this.getEndPoint().getX() - this.getStartPoint().getX() + 1;
     }
 
     @Override

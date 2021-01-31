@@ -31,7 +31,7 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine>{
 
     @Override
     public int length() {
-        return this.getEndPoint().getY() - this.getStartPoint().getY();
+        return this.getEndPoint().getY() - this.getStartPoint().getY() + 1;
     }
 
     @Override

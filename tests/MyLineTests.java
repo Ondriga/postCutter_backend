@@ -14,22 +14,22 @@ public class MyLineTests {
     Coordinate coor3 = new Coordinate(6, 3);
     Coordinate coor4 = new Coordinate(7, 3);
 
-    MyLine line1 = MyLine.createLine(coor1, coor2);
-    MyLine line2 = MyLine.createLine(coor3, coor4);
-    MyLine linedot = MyLine.createLine(coor1, coor1);
+    MyLine line1 = VerticalLine.createLine(coor1, coor2);
+    MyLine line2 = HorizontalLine.createLine(coor3, coor4);
+    MyLine linedot = VerticalLine.createLine(coor1, coor1);
 
     @Test
     public void createMyLineTest(){
         assertNotNull("Test if create was successful (vertical line)", line1);
         assertNotNull("Test if create was successful (horizontal line)", line2);
-        assertNull("Test if create wasn`t successful (diagonal line)", MyLine.createLine(coor1, coor3));
+        assertNull("Test if create wasn`t successful (diagonal line)", HorizontalLine.createLine(coor1, coor3));
         assertNotNull("Test if create was successful (dot)", linedot);
     }
 
     @Test
     public void coordinateOrderTest(){
-        MyLine line3 = MyLine.createLine(coor2, coor1);
-        MyLine line4 = MyLine.createLine(coor4, coor3);
+        MyLine line3 = VerticalLine.createLine(coor2, coor1);
+        MyLine line4 = HorizontalLine.createLine(coor4, coor3);
         
         assertTrue("Bad starting point (vertical line, create with correct order)", line1.getStartPoint().equals(coor1));
         assertTrue("Bad ending point (vertical line, create with correct order)", line1.getEndPoint().equals(coor2));
@@ -75,7 +75,7 @@ public class MyLineTests {
         assertTrue("Start point wasn`t changed after successful extend by one. (from dot to vertical line)", linedot.getStartPoint().equals(coor1));
         assertTrue("End point wasn`t changed after successful extend by one. (from dot to vertical line)", linedot.getEndPoint().equals(new Coordinate(5, 21)));
 
-        MyLine lineDotHorizontal = MyLine.createLine(coor1, coor1);
+        MyLine lineDotHorizontal = HorizontalLine.createLine(coor1, coor1);
 
         assertTrue("Try extend with correct coordinate. (dot coordinates[5, 20][5, 20], new coordinate[6, 20])", lineDotHorizontal.extendByOne(new Coordinate(6, 20)));
         assertTrue("Start point wasn`t changed after successful extend by one. (from dot to horizontal line)", lineDotHorizontal.getStartPoint().equals(coor1));
