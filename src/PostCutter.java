@@ -204,6 +204,7 @@ public class PostCutter extends JFrame{
         
         LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
+        lineHandler.deleteNoise(picture.cols(), picture.rows());
         for(MyLine line : lineHandler.getHorizontalLines()){
             for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
                 linesMat.put(line.getStartPoint().getY(), i, 80);

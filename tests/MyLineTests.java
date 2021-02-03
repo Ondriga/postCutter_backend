@@ -14,6 +14,20 @@ public class MyLineTests {
     Coordinate coor2 = new Coordinate(5, 40);
     Coordinate coor3 = new Coordinate(6, 3);
     Coordinate coor4 = new Coordinate(7, 3);
+    Coordinate coor5 = new Coordinate(5, 80);
+    Coordinate coor6 = new Coordinate(10, 20);
+    Coordinate coor7 = new Coordinate(10, 80);
+    Coordinate coor8 = new Coordinate(0, 40);
+    Coordinate coor9 = new Coordinate(0, 80);
+    Coordinate coor10 = new Coordinate(7, 43);
+    Coordinate coor11 = new Coordinate(7, 200);
+    Coordinate coor12 = new Coordinate(20, 20);
+    Coordinate coor13 = new Coordinate(40, 20);
+    Coordinate coor14 = new Coordinate(20, 0);
+    Coordinate coor15 = new Coordinate(40, 0);
+    Coordinate coor16 = new Coordinate(40, 3);
+    Coordinate coor17 = new Coordinate(9, 2);
+    Coordinate coor18 = new Coordinate(200, 2);
 
     MyLine line1 = VerticalLine.createLine(coor1, coor2);
     MyLine line2 = HorizontalLine.createLine(coor3, coor4);
@@ -52,7 +66,7 @@ public class MyLineTests {
     }
 
     @Test
-    public void extendLineTest(){
+    public void extendLineByDotTest(){
         assertFalse("Try extend with wrong coordinate. (vertical line coordinates[5, 20][5, 40], new coordinate[4, 35])", line1.extendByOne(new Coordinate(4, 35)));
         assertTrue("Start point was changed after bad extend by one. (vertical line)", line1.getStartPoint().equals(coor1));
         assertFalse("Try extend with wrong coordinate. (vertical line coordinates[5, 20][5, 40], new coordinate[4, 20])", line1.extendByOne(new Coordinate(4, 20)));
@@ -81,5 +95,43 @@ public class MyLineTests {
         assertTrue("Try extend with correct coordinate. (dot coordinates[5, 20][5, 20], new coordinate[6, 20])", lineDotHorizontal.extendByOne(new Coordinate(6, 20)));
         assertTrue("Start point wasn`t changed after successful extend by one. (from dot to horizontal line)", lineDotHorizontal.getStartPoint().equals(coor1));
         assertTrue("End point wasn`t changed after successful extend by one. (from dot to horizontal line)", lineDotHorizontal.getEndPoint().equals(new Coordinate(6, 20)));
+    }
+
+    @Test
+    public void extendLineByLineTestForVertical(){
+        MyLine vertical1 = VerticalLine.createLine(coor6, coor7);
+        MyLine vertical2 = VerticalLine.createLine(coor8, coor9);
+        MyLine vertical3 = VerticalLine.createLine(coor2, coor5);
+        MyLine vertical4 = VerticalLine.createLine(coor10, coor11);
+
+        assertEquals("Test, if extend fail", 1, line1.extendByLine(vertical1));
+        assertEquals("Test, if extend fail", -1, line1.extendByLine(vertical2));
+
+        assertEquals("Test if extend by line with one same coordinate", 0, line1.extendByLine(vertical3));
+        assertTrue("Try extend with connect line. (New start of vertical line coordinates[5, 20])", line1.getStartPoint().equals(coor1));
+        assertTrue("Try extend with connect line. (New end of vertical line coordinates[5, 80])", line1.getEndPoint().equals(coor5));
+
+        assertEquals("Test if extend by line with coordinate near the end of line", 0, line1.extendByLine(vertical4));
+        assertTrue("Try extend with connect line. (New start of vertical line coordinates[7, 20])", line1.getStartPoint().equals(new Coordinate(7, 20)));
+        assertTrue("Try extend with connect line. (New end of vertical line coordinates[7, 200])", line1.getEndPoint().equals(coor11));
+    }
+
+    @Test
+    public void extendLineByLineTestForHorizontall(){
+        MyLine horizontal1 = HorizontalLine.createLine(coor12, coor13);
+        MyLine horizontal2 = HorizontalLine.createLine(coor14, coor15);
+        MyLine horizontal3 = HorizontalLine.createLine(coor4, coor16);
+        MyLine horizontal4 = HorizontalLine.createLine(coor17, coor18);
+
+        assertEquals("Test, if extend fail", 1, line2.extendByLine(horizontal1));
+        assertEquals("Test, if extend fail", -1, line2.extendByLine(horizontal2));
+
+        assertEquals("Test if extend by line with one same coordinate", 0, line2.extendByLine(horizontal3));
+        assertTrue("Try extend with connect line. (New start of horizontal line coordinates[6, 3])", line2.getStartPoint().equals(coor3));
+        assertTrue("Try extend with connect line. (New end of horizontal line coordinates[40, 3])", line2.getEndPoint().equals(coor16));
+        
+        assertEquals("Test if extend by line with coordinate near the end of line", 0, line2.extendByLine(horizontal4));
+        assertTrue("Try extend with connect line. (New start of horizontal line coordinates[6, 2])", line2.getStartPoint().equals(new Coordinate(6, 2)));
+        assertTrue("Try extend with connect line. (New end of horizontal line coordinates[200, 2])", line2.getEndPoint().equals(coor18));
     }
 }

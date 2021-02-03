@@ -1,8 +1,8 @@
 package postCutter.cutting.geometricShapes;
 
 public class Coordinate {
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
 
     public Coordinate(int x, int y){
         this.x = x;
@@ -15,6 +15,14 @@ public class Coordinate {
 
     public int getY(){
         return this.y;
+    }
+
+    public void setX(int x){
+        this.x = x;
+    }
+
+    public void setY(int y){
+        this.y = y;
     }
 
     /**
