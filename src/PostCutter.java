@@ -6,8 +6,8 @@
  */
 
 import postCutter.edgeDetection.*;
-import postCutter.cutting.geometricShapes.line.*;
-import postCutter.cutting.geometricShapes.rectangle.*;
+import postCutter.geometricShapes.line.*;
+import postCutter.geometricShapes.rectangle.*;
 
 import java.io.File;
 import java.io.IOException;

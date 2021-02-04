@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import postCutter.cutting.geometricShapes.line.*;
-import postCutter.cutting.geometricShapes.Coordinate;
+import postCutter.geometricShapes.line.*;
+import postCutter.geometricShapes.Coordinate;
 
 public class MyLineTests {
     Coordinate coor1 = new Coordinate(5, 20);

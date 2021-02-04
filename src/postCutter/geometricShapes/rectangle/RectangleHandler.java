@@ -1,11 +1,11 @@
-package postCutter.cutting.geometricShapes.rectangle;
+package postCutter.geometricShapes.rectangle;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import postCutter.cutting.geometricShapes.Coordinate;
-import postCutter.cutting.geometricShapes.line.*;
+import postCutter.geometricShapes.Coordinate;
+import postCutter.geometricShapes.line.*;
 
 public final class RectangleHandler {
     private static final int TRASH_HOLD = 5;

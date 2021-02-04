@@ -1,6 +1,6 @@
-package postCutter.cutting.geometricShapes.line;
+package postCutter.geometricShapes.line;
 
-import postCutter.cutting.geometricShapes.Coordinate;
+import postCutter.geometricShapes.Coordinate;
 
 public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     private VerticalLine(Coordinate startPoint, Coordinate endPoint){

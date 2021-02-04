@@ -1,4 +1,4 @@
-package postCutter.cutting.geometricShapes;
+package postCutter.geometricShapes;
 
 public class Coordinate {
     private int x;
