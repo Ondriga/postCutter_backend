@@ -11,7 +11,9 @@ public final class RectangleHandler {
     private static final int TRASH_HOLD = 5;
     private static final int MIN_X = 0;
 
-    public MyRectangle getRectangle(List<MyLine> lines, int maxX, int height){
+    private MyRectangle rectangle = null;
+
+    public void findRectangle(List<MyLine> lines, int maxX, int height){
         List<MyLine> firstHalfLines = new LinkedList<>();
         List<MyLine> secondHalfLines = new LinkedList<>();
         for(MyLine line : lines){
@@ -39,13 +41,14 @@ public final class RectangleHandler {
         }
 
         if(startY == endY){
-            return null;
+            this.rectangle = null;
+            return;
         }
 
         Coordinate cornerA = new Coordinate(MIN_X, startY);
         Coordinate cornerB = new Coordinate(maxX, endY);
 
-        return MyRectangle.createRectangle(cornerA, cornerB);
+        this.rectangle = MyRectangle.createRectangle(cornerA, cornerB);
     }
 
     private boolean isLeftXCorrect(int minX, int leftLineX){
@@ -67,5 +70,9 @@ public final class RectangleHandler {
             }
         }
         return limitY;
+    }
+
+    public MyRectangle getRectangle() {
+        return rectangle;
     }
 }

@@ -5,6 +5,7 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
+import postCutter.Cutter;
 import postCutter.edgeDetection.*;
 import postCutter.geometricShapes.line.*;
 import postCutter.geometricShapes.rectangle.*;
@@ -60,6 +61,8 @@ public class PostCutter extends JFrame{
     /// Array with paths to pictures
     private static String[] pathNames;
 
+    private boolean flagFinal = false;
+
     /// ArrayList contain classes of edge detection methods
     private List<EdgeDetector> edgeMethods = new ArrayList<>();
     /// Actual using edge detection method object 
@@ -107,10 +110,13 @@ public class PostCutter extends JFrame{
     private void setUpGuiComponents(){
         JButton buttonPrevious = new JButton("PREV");
         JButton buttonNext = new JButton("NEXT");
+        JButton buttonFinal = new JButton("Final");
         buttonNext.addActionListener(e -> changeImage(1));
         buttonPrevious.addActionListener(e -> changeImage(-1));
+        buttonFinal.addActionListener(e -> toggleFinal(buttonFinal));
         panelButtonsPhoto.add(buttonPrevious);
         panelButtonsPhoto.add(buttonNext);
+        panelButtonsPhoto.add(buttonFinal);
 
         panelButtonsMeth.setLayout(new BoxLayout(panelButtonsMeth, BoxLayout.PAGE_AXIS));
         // Create buttons for all edge detection methods
@@ -128,6 +134,16 @@ public class PostCutter extends JFrame{
         panelImages.add(labelOrigin);
         panelImages.add(labelChange);
         panelImages.add(labelLines);
+    }
+
+    private void toggleFinal(JButton button){
+        if(this.flagFinal){
+            button.setText("FINAL");
+        }else{
+            button.setText("METHODS");
+        }
+        this.flagFinal = !this.flagFinal;
+        changeImage(0);
     }
 
     /**
@@ -167,36 +183,52 @@ public class PostCutter extends JFrame{
         try {
             img = ImageIO.read(new File(path));
             labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
-            Mat pictureChange = edgeDetector.highlightEdge(path);
-            labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
-
-            labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
-            //labelLines.setIcon(getResizedIcon(highlightLinesAllMethods(path, pictureChange), labelLines.getSize()));
+            Mat picture = EdgeDetector.getGrayScale(path);
+            if(!flagFinal){
+                Mat pictureChange = edgeDetector.highlightEdge(picture);
+                labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
+                labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
+            }else{
+                Cutter cutter = new Cutter(picture);
+                Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                printLines(canvas, cutter.getHorizontalLines());
+                printLines(canvas, cutter.getVerticalLines());
+                labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvas), labelChange.getSize()));
+                labelLines.setIcon(getResizedIcon(mat2BufferedImage(getRectanglePrinted(picture, cutter.getRectangle())), labelLines.getSize()));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         } 
     }
 
-    private BufferedImage highlightLinesAllMethods(String originalPicture, Mat picture){
-        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
-        
-        LineHandler lineHandler = new LineHandler();
-        for(EdgeDetector method : this.edgeMethods){
-            lineHandler.findLines(method.highlightEdge(originalPicture));
-            for(MyLine line : lineHandler.getHorizontalLines()){
+    private void printLines(Mat picture, List<MyLine> lines){
+        for(MyLine line : lines){
+            if(line.getStartPoint().getY() == line.getEndPoint().getY()){
                 for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                    linesMat.put(line.getStartPoint().getY(), i, 80);
+                    picture.put(line.getStartPoint().getY(), i, 0);
                 }
-            }
-            for(MyLine line : lineHandler.getVerticalLines()){
+            }else{
                 for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                    linesMat.put(i, line.getStartPoint().getX(), 80);
+                    picture.put(i, line.getStartPoint().getX(), 0);
                 }
             }
         }
+    }
 
-        return mat2BufferedImage(linesMat);
+    private Mat getRectanglePrinted(Mat picture, MyRectangle rectangle){
+        Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+        if(rectangle != null){
+            for(int i = rectangle.getCornerA().getX(); i <= rectangle.getCornerB().getX(); i++){
+                canvas.put(rectangle.getCornerA().getY(), i, 0);
+                canvas.put(rectangle.getCornerB().getY(), i, 0);
+            }
+            for(int i = rectangle.getCornerA().getY(); i <= rectangle.getCornerB().getY(); i++){
+                canvas.put(i, rectangle.getCornerA().getX(), 0);
+                canvas.put(i, rectangle.getCornerB().getX()-1, 0);
+            }
+        }
+        return canvas;
     }
 
     private BufferedImage highlightLines(Mat picture){
@@ -217,7 +249,8 @@ public class PostCutter extends JFrame{
         }
 
         RectangleHandler rectangleHandler = new RectangleHandler();
-        MyRectangle rectangle = rectangleHandler.getRectangle(lineHandler.getHorizontalLines(), picture.cols()-1, picture.rows());
+        rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), picture.cols()-1, picture.rows());
+        MyRectangle rectangle = rectangleHandler.getRectangle();
 
         if(rectangle != null){
             for(int i = rectangle.getCornerA().getX(); i <= rectangle.getCornerB().getX(); i++){
