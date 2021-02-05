@@ -62,8 +62,8 @@ public class Sobel extends EdgeDetector {
     }
 
     @Override
-    public Mat highlightEdge(String sourceImage) {
+    public Mat highlightEdge(Mat picture) {
         Convolution convolution = new Convolution();
-        return convolution.doConvolution(getGrayScale(sourceImage), this.verticalKernel, this.horizontalKernel);
+        return convolution.doConvolution(picture, this.verticalKernel, this.horizontalKernel);
     }
 }

@@ -29,11 +29,10 @@ public class Canny extends EdgeDetector {
     }
 
     @Override
-    public Mat highlightEdge(String sourceImage) {
-        Mat srcMat = getGrayScale(sourceImage);
-        Mat destMat = new Mat(srcMat.rows(), srcMat.cols(), srcMat.type());
+    public Mat highlightEdge(Mat picture) {
+        Mat destMat = new Mat(picture.rows(), picture.cols(), picture.type());
 
-        Imgproc.Canny(srcMat, destMat, THRESHOLD1, THRESHOLD2);
+        Imgproc.Canny(picture, destMat, THRESHOLD1, THRESHOLD2);
 
         return destMat;
     }

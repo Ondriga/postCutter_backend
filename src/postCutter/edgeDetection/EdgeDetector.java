@@ -31,10 +31,10 @@ public abstract class EdgeDetector{
 
     /**
      * Show all edges in pictures.
-     * @param sourceImage picture path
+     * @param picture input picture
      * @return modified picture with edge highlight in BufferImage format
      */
-    public abstract Mat highlightEdge(String sourceImage);
+    public abstract Mat highlightEdge(Mat picture);
 
     /**
      * Change color picture into grayscale picture.

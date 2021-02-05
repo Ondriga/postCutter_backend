@@ -45,8 +45,8 @@ public class Laplace extends EdgeDetector {
     }
 
     @Override
-    public Mat highlightEdge(String sourceImage) {
+    public Mat highlightEdge(Mat picture) {
         Convolution convolution = new Convolution();
-        return convolution.doConvolution(getGrayScale(sourceImage), this.kernel);
+        return convolution.doConvolution(picture, this.kernel);
     }
 }
