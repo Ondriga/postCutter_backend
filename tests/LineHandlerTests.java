@@ -234,4 +234,54 @@ public class LineHandlerTests {
         assertTrue("Start point of vertical line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
         assertTrue("End point of vertical line wasn`t [0, 19]", list.get(0).getEndPoint().equals(new Coordinate(0, 19)));
     }
+
+    @Test
+    public void VerticalLinesNearEachOther(){
+        mat1.put(0, 0, 255);
+        mat1.put(1, 0, 255);
+        mat1.put(2, 0, 255);
+        mat1.put(3, 0, 255);
+        mat1.put(4, 0, 255);
+        mat1.put(5, 0, 255);
+        
+        mat2.put(0, 2, 255);
+        mat2.put(1, 2, 255);
+        mat2.put(2, 2, 255);
+        mat2.put(3, 2, 255);
+        mat2.put(4, 2, 255);
+        mat2.put(5, 2, 255);
+
+        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat2);
+        List<MyLine> list = lineHandler.getVerticalLines();
+
+        assertEquals("Vertical list size test", 1, list.size());
+        assertTrue("Start point of vertical line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
+        assertTrue("End point of vertical line wasn`t [0, 5]", list.get(0).getEndPoint().equals(new Coordinate(0, 5)));
+    }
+
+    @Test
+    public void HorizontalLinesNearEachOther(){
+        mat1.put(0, 0, 255);
+        mat1.put(0, 1, 255);
+        mat1.put(0, 2, 255);
+        mat1.put(0, 3, 255);
+        mat1.put(0, 4, 255);
+        mat1.put(0, 5, 255);
+        
+        mat2.put(2, 0, 255);
+        mat2.put(2, 1, 255);
+        mat2.put(2, 2, 255);
+        mat2.put(2, 3, 255);
+        mat2.put(2, 4, 255);
+        mat2.put(2, 5, 255);
+
+        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat2);
+        List<MyLine> list = lineHandler.getHorizontalLines();
+
+        assertEquals("Horizontal list size test", 1, list.size());
+        assertTrue("Start point of horizontal line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
+        assertTrue("End point of horizontal line wasn`t [5, 0]", list.get(0).getEndPoint().equals(new Coordinate(5, 0)));
+    }
 }
