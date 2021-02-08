@@ -1,6 +1,6 @@
 package postCutter.geometricShapes.line;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.opencv.core.Mat;
 import postCutter.geometricShapes.Coordinate;
 
 public final class LineHandler {
-    private List<VerticalLine> verticalLines = new LinkedList<>();
-    private List<HorizontalLine> horizontalLines = new LinkedList<>();
+    private List<VerticalLine> verticalLines = new ArrayList<>();
+    private List<HorizontalLine> horizontalLines = new ArrayList<>();
 
     private static final int TRASH_HOLD_COLOR = 85;
     private static final int ALLOW_EMPTY_RANGE = 5;
@@ -30,7 +30,6 @@ public final class LineHandler {
                 }
             }
         }
-        Collections.sort(this.horizontalLines);
 
         // vertical lines
         for (int i=0; i<rows; i++){
@@ -40,7 +39,6 @@ public final class LineHandler {
                 }
             }
         }
-        Collections.sort(this.verticalLines);
     }
 
     private boolean checkYInPicture(int y, int maxY){
@@ -86,16 +84,16 @@ public final class LineHandler {
 
     private void addHorizontalLine(HorizontalLine line){
         if(line != null){
-            for(HorizontalLine listLine : this.horizontalLines){
-                switch(listLine.extendByLine(line)){
+            for(int i=0; i<this.horizontalLines.size(); i++){
+                switch(this.horizontalLines.get(i).extendByLine(line)){
                     case -1:
                         break;
                     case 0:
-                        this.horizontalLines.removeIf(o -> (o.equals(listLine)));
-                        addHorizontalLine(listLine);
-                        return;
+                        line = this.horizontalLines.get(i);
+                        this.horizontalLines.remove(i--);
+                        break;
                     default:
-                        this.horizontalLines.add(line);
+                        this.horizontalLines.add(i, line);
                         return;
                 }
             }
@@ -146,16 +144,16 @@ public final class LineHandler {
 
     private void addVerticalLine(VerticalLine line){
         if(line != null){
-            for(VerticalLine listLine : this.verticalLines){
-                switch(listLine.extendByLine(line)){
+            for(int i=0; i<this.verticalLines.size(); i++){
+                switch(this.verticalLines.get(i).extendByLine(line)){
                     case -1:
                         break;
                     case 0:
-                        this.verticalLines.removeIf(o -> (o.equals(listLine)));
-                        addVerticalLine(listLine);
-                        return;
+                        line = this.verticalLines.get(i);
+                        this.verticalLines.remove(i--);
+                        break;
                     default:
-                        this.verticalLines.add(line);
+                        this.verticalLines.add(i, line);
                         return;
                 }
             }

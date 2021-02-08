@@ -46,18 +46,18 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
             if(this.getStartPoint().getX() + ALLOW_POSITION_MOVE >= line.getStartPoint().getX()){
                 return 0;
             }
-            return 1;
+            return -1;
         }
-        return -1;
+        return 1;
     }
 
-    private boolean lineCover(MyLine line){
-        if(this.getStartPoint().getY() - ALLOW_EMPTY_RANGE <= line.getStartPoint().getY()
-        && this.getEndPoint().getY() + ALLOW_EMPTY_RANGE >= line.getStartPoint().getY()){
+    private boolean lineCover(MyLine line1, MyLine line2){
+        if(line1.getStartPoint().getY() - ALLOW_EMPTY_RANGE <= line2.getStartPoint().getY()
+        && line1.getEndPoint().getY() + ALLOW_EMPTY_RANGE >= line2.getStartPoint().getY()){
             return true;
         }
-        if(this.getStartPoint().getY() - ALLOW_EMPTY_RANGE <= line.getEndPoint().getY()
-        && this.getEndPoint().getY() + ALLOW_EMPTY_RANGE >= line.getEndPoint().getY()){
+        if(line1.getStartPoint().getY() - ALLOW_EMPTY_RANGE <= line2.getEndPoint().getY()
+        && line1.getEndPoint().getY() + ALLOW_EMPTY_RANGE >= line2.getEndPoint().getY()){
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     public int extendByLine(MyLine line) {
         int positionFlag = checkWidth(line);
         if(positionFlag == 0){
-            if(lineCover(line)){
+            if(lineCover(this, line) || lineCover(line, this)){
                 int x = this.getStartPoint().getX();
                 if(line.length() > this.length()){
                     x = line.getStartPoint().getX();

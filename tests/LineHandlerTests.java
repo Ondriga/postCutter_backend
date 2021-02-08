@@ -83,17 +83,12 @@ public class LineHandlerTests {
 
     @Test
     public void extendLineByLineHorizontal(){
-        mat1.put(3, 0, 255);
-        mat1.put(3, 2, 255);
-        mat1.put(3, 3, 255);
-        mat1.put(3, 4, 255);
-
-        mat2.put(2, 2, 255);
-        mat2.put(2, 3, 255);
-        mat2.put(2, 4, 255);
-        mat2.put(2, 5, 255);
-        mat2.put(2, 6, 255);
-        mat2.put(2, 7, 255);
+        for(int i=0; i<=4; i++){
+            mat1.put(3, i, 255);
+        }
+        for(int i=2; i<=7; i++){
+            mat2.put(2, i, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -106,19 +101,12 @@ public class LineHandlerTests {
 
     @Test
     public void extendLineByLineVertical(){
-        mat1.put(0, 0, 255);
-        mat1.put(1, 0, 255);
-        mat1.put(2, 0, 255);
-        mat1.put(3, 0, 255);
-        mat1.put(4, 0, 255);
-        mat1.put(5, 0, 255);
-        mat1.put(6, 0, 255);
-
-        mat2.put(3, 1, 255);
-        mat2.put(4, 1, 255);
-        mat2.put(5, 1, 255);
-        mat2.put(6, 1, 255);
-        mat2.put(7, 1, 255);
+        for(int i=0; i<=6; i++){
+            mat1.put(i, 0, 255);
+        }
+        for(int i=3; i<=7; i++){
+            mat2.put(i, 1, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -131,37 +119,12 @@ public class LineHandlerTests {
 
     @Test
     public void removeNoise(){
-        mat1.put(0, 0, 255);
-        mat1.put(1, 0, 255);
-        mat1.put(2, 0, 255);
-        mat1.put(3, 0, 255);
-        mat1.put(4, 0, 255);
-        mat1.put(5, 0, 255);
-
-        mat1.put(0, 20, 255);
-        mat1.put(1, 20, 255);
-        mat1.put(2, 20, 255);
-        mat1.put(3, 20, 255);
-        mat1.put(4, 20, 255);
-        mat1.put(5, 20, 255);
-        mat1.put(6, 20, 255);
-        mat1.put(7, 20, 255);
-        mat1.put(8, 20, 255);
-        mat1.put(9, 20, 255);
-        mat1.put(10, 20, 255);
-        mat1.put(11, 20, 255);
-        mat1.put(12, 20, 255);
-        mat1.put(13, 20, 255);
-        mat1.put(14, 20, 255);
-        mat1.put(15, 20, 255);
-        mat1.put(16, 20, 255);
-        mat1.put(17, 20, 255);
-        mat1.put(18, 20, 255);
-        mat1.put(19, 20, 255);
-        mat1.put(20, 20, 255);
-        mat1.put(21, 20, 255);
-        mat1.put(22, 20, 255);
-        mat1.put(23, 20, 255);
+        for(int i=0; i<=5; i++){
+            mat1.put(i, 0, 255);
+        }
+        for(int i=0; i<=23; i++){
+            mat1.put(i, 20, 255);
+        }
 
         lineHandler.findLines(mat1);
 
@@ -172,26 +135,15 @@ public class LineHandlerTests {
 
     @Test
     public void connect3HorizontalLines(){
-        mat1.put(0, 0, 255);
-        mat1.put(0, 1, 255);
-        mat1.put(0, 2, 255);
-        mat1.put(0, 3, 255);
-        mat1.put(0, 4, 255);
-        mat1.put(0, 5, 255);
-
-        mat2.put(0, 6, 255);
-        mat2.put(0, 7, 255);
-        mat2.put(0, 8, 255);
-        mat2.put(0, 9, 255);
-        mat2.put(0, 10, 255);
-        mat2.put(0, 11, 255);
-
-        mat1.put(0, 14, 255);
-        mat1.put(0, 15, 255);
-        mat1.put(0, 16, 255);
-        mat1.put(0, 17, 255);
-        mat1.put(0, 18, 255);
-        mat1.put(0, 19, 255);
+        for(int i=0; i<=5; i++){
+            mat2.put(0, i, 255);
+        }
+        for(int i=6; i<=11; i++){
+            mat1.put(0, i,255);
+        }
+        for(int i=14; i<=19; i++){
+            mat2.put(0, i, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -205,26 +157,15 @@ public class LineHandlerTests {
 
     @Test
     public void connect3VerticalLines(){
-        mat1.put(0, 0, 255);
-        mat1.put(1, 0, 255);
-        mat1.put(2, 0, 255);
-        mat1.put(3, 0, 255);
-        mat1.put(4, 0, 255);
-        mat1.put(5, 0, 255);
-
-        mat2.put(6, 0, 255);
-        mat2.put(7, 0, 255);
-        mat2.put(8, 0, 255);
-        mat2.put(9, 0, 255);
-        mat2.put(10, 0, 255);
-        mat2.put(11, 0, 255);
-
-        mat1.put(14, 0, 255);
-        mat1.put(15, 0, 255);
-        mat1.put(16, 0, 255);
-        mat1.put(17, 0, 255);
-        mat1.put(18, 0, 255);
-        mat1.put(19, 0, 255);
+        for(int i=0; i<=5; i++){
+            mat1.put(i, 0, 255);
+        }
+        for(int i=6; i<=11; i++){
+            mat2.put(i, 0, 255);
+        }
+        for(int i=14; i<=19; i++){
+            mat1.put(i, 0, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -237,19 +178,10 @@ public class LineHandlerTests {
 
     @Test
     public void VerticalLinesNearEachOther(){
-        mat1.put(0, 0, 255);
-        mat1.put(1, 0, 255);
-        mat1.put(2, 0, 255);
-        mat1.put(3, 0, 255);
-        mat1.put(4, 0, 255);
-        mat1.put(5, 0, 255);
-        
-        mat2.put(0, 2, 255);
-        mat2.put(1, 2, 255);
-        mat2.put(2, 2, 255);
-        mat2.put(3, 2, 255);
-        mat2.put(4, 2, 255);
-        mat2.put(5, 2, 255);
+        for(int i=0; i<=5; i++){
+            mat1.put(i, 0, 255);
+            mat2.put(i, 2, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -262,19 +194,10 @@ public class LineHandlerTests {
 
     @Test
     public void HorizontalLinesNearEachOther(){
-        mat1.put(0, 0, 255);
-        mat1.put(0, 1, 255);
-        mat1.put(0, 2, 255);
-        mat1.put(0, 3, 255);
-        mat1.put(0, 4, 255);
-        mat1.put(0, 5, 255);
-        
-        mat2.put(2, 0, 255);
-        mat2.put(2, 1, 255);
-        mat2.put(2, 2, 255);
-        mat2.put(2, 3, 255);
-        mat2.put(2, 4, 255);
-        mat2.put(2, 5, 255);
+        for(int i=0; i<=5; i++){
+            mat1.put(0, i, 255);
+            mat2.put(2, i, 255);
+        }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
@@ -283,5 +206,59 @@ public class LineHandlerTests {
         assertEquals("Horizontal list size test", 1, list.size());
         assertTrue("Start point of horizontal line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
         assertTrue("End point of horizontal line wasn`t [5, 0]", list.get(0).getEndPoint().equals(new Coordinate(5, 0)));
+    }
+
+    @Test
+    public void HorizontalCover(){
+        for(int i=10; i<=15; i++){
+            mat1.put(0, i, 255);
+        }
+
+        for(int i=0; i<=30; i++){
+            mat2.put(0, i, 255);
+        }
+
+        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat2);
+        List<MyLine> list = lineHandler.getHorizontalLines();
+
+        assertEquals("Horizontal list size test", 1, list.size());
+        assertTrue("Start point of horizontal line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
+        assertTrue("End point of horizontal line wasn`t [30, 0]", list.get(0).getEndPoint().equals(new Coordinate(30, 0)));
+    }
+
+    @Test
+    public void HorizontalMultipleSameLines(){
+        Mat mat3 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
+        Mat mat4 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
+        for(int i=0; i<=15; i++){
+            mat1.put(0, i, 255);
+            mat1.put(1, i, 255);
+            mat2.put(0, i, 255);
+            mat2.put(2, i, 255);
+            mat3.put(0, i, 255);
+            mat4.put(0, i+2, 255);
+        }
+
+        for(int i=0; i<=15; i++){
+            mat1.put(10, i, 255);
+            mat1.put(11, i, 255);
+            mat2.put(10, i, 255);
+            mat2.put(12, i, 255);
+            mat3.put(10, i, 255);
+            mat4.put(10, i+2, 255);
+        }
+
+        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat3);
+        lineHandler.findLines(mat4);
+        List<MyLine> list = lineHandler.getHorizontalLines();
+
+        assertEquals("Horizontal list size test", 2, list.size());
+        assertTrue("Start point of first horizontal line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
+        assertTrue("End point of first horizontal line wasn`t [17, 0]", list.get(0).getEndPoint().equals(new Coordinate(17, 0)));
+        assertTrue("Start point of second horizontal line wasn`t [0, 10]", list.get(1).getStartPoint().equals(new Coordinate(0, 10)));
+        assertTrue("End point of second horizontal line wasn`t [17, 10]", list.get(1).getEndPoint().equals(new Coordinate(17, 10)));
     }
 }

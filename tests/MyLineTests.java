@@ -104,8 +104,8 @@ public class MyLineTests {
         MyLine vertical3 = VerticalLine.createLine(coor2, coor5);
         MyLine vertical4 = VerticalLine.createLine(coor10, coor11);
 
-        assertEquals("Test, if extend fail", 1, line1.extendByLine(vertical1));
-        assertEquals("Test, if extend fail", -1, line1.extendByLine(vertical2));
+        assertEquals("Test, if extend fail", -1, line1.extendByLine(vertical1));
+        assertEquals("Test, if extend fail", 1, line1.extendByLine(vertical2));
 
         assertEquals("Test if extend by line with one same coordinate", 0, line1.extendByLine(vertical3));
         assertTrue("Try extend with connect line. (New start of vertical line coordinates[5, 20])", line1.getStartPoint().equals(coor1));
@@ -123,8 +123,8 @@ public class MyLineTests {
         MyLine horizontal3 = HorizontalLine.createLine(coor4, coor16);
         MyLine horizontal4 = HorizontalLine.createLine(coor17, coor18);
 
-        assertEquals("Test, if extend fail", 1, line2.extendByLine(horizontal1));
-        assertEquals("Test, if extend fail", -1, line2.extendByLine(horizontal2));
+        assertEquals("Test, if extend fail", -1, line2.extendByLine(horizontal1));
+        assertEquals("Test, if extend fail", 1, line2.extendByLine(horizontal2));
 
         assertEquals("Test if extend by line with one same coordinate", 0, line2.extendByLine(horizontal3));
         assertTrue("Try extend with connect line. (New start of horizontal line coordinates[6, 3])", line2.getStartPoint().equals(coor3));
