@@ -92,4 +92,14 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
         }
         return positionFlag;
     }
+
+    private boolean isYCorrect(int line1Y, int line2Y){
+        return Math.abs(line1Y - line2Y) <= ALLOW_EMPTY_RANGE;
+    }
+
+    @Override
+    public boolean isSimilar(MyLine line) {
+        return isYCorrect(this.getStartPoint().getY(), line.getStartPoint().getY()) &&
+        isYCorrect(this.getEndPoint().getY(), line.getEndPoint().getY());
+    }
 }

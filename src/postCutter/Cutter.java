@@ -26,7 +26,7 @@ public class Cutter {
             lineHandler.findLines(edgeMethod.highlightEdge(picture));
         }
         lineHandler.deleteNoise(picture.cols(), picture.rows());
-        rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), picture.cols(), picture.rows());
+        rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), picture.cols(), picture.rows());
     }
 
     public List<MyLine> getHorizontalLines(){

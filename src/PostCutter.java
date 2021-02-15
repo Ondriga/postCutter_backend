@@ -225,7 +225,7 @@ public class PostCutter extends JFrame{
             }
             for(int i = rectangle.getCornerA().getY(); i <= rectangle.getCornerB().getY(); i++){
                 canvas.put(i, rectangle.getCornerA().getX(), 0);
-                canvas.put(i, rectangle.getCornerB().getX()-1, 0);
+                canvas.put(i, rectangle.getCornerB().getX(), 0);
             }
         }
         return canvas;
@@ -249,7 +249,7 @@ public class PostCutter extends JFrame{
         }
 
         RectangleHandler rectangleHandler = new RectangleHandler();
-        rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), picture.cols()-1, picture.rows());
+        rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), picture.cols()-1, picture.rows());
         MyRectangle rectangle = rectangleHandler.getRectangle();
 
         if(rectangle != null){

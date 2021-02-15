@@ -35,6 +35,8 @@ public abstract class MyLine {
 
     public abstract int extendByLine(MyLine line);
 
+    public abstract boolean isSimilar(MyLine line);
+
     /**
      * Override for equals function of the MyLine object
      * Needed for comparing two lines

@@ -92,4 +92,14 @@ public class HorizontalLine extends MyLine implements Comparable<HorizontalLine>
         }
         return positionFlag;
     }
+
+    private boolean isXCorrect(int line1X, int line2X){
+        return Math.abs(line1X - line2X) <= ALLOW_EMPTY_RANGE;
+    }
+
+    @Override
+    public boolean isSimilar(MyLine line) {
+        return isXCorrect(this.getStartPoint().getX(), line.getStartPoint().getX()) &&
+        isXCorrect(this.getEndPoint().getX(), line.getEndPoint().getX());
+    }
 }

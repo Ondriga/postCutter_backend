@@ -26,7 +26,9 @@ public final class LineHandler {
         for(int j=0; j<cols; j++){
             for(int i=0; i<rows; i++){
                 if(picture.get(i, j)[0] > TRASH_HOLD_COLOR){
-                    addHorizontalLine(findHorizontalLine(new Coordinate(j, i), picture));
+                    if(j+1<cols && picture.get(i, j+1)[0] > TRASH_HOLD_COLOR){
+                        addHorizontalLine(findHorizontalLine(new Coordinate(j, i), picture));
+                    }
                 }
             }
         }
@@ -35,7 +37,9 @@ public final class LineHandler {
         for (int i=0; i<rows; i++){
             for (int j=0; j<cols; j++){
                 if(pictureClone.get(i, j)[0] > TRASH_HOLD_COLOR){
-                    addVerticalLine(findVerticalLine(new Coordinate(j, i), pictureClone));
+                    if(i+1< rows && pictureClone.get(i+1, j)[0] > TRASH_HOLD_COLOR){
+                        addVerticalLine(findVerticalLine(new Coordinate(j, i), pictureClone));
+                    }
                 }
             }
         }
