@@ -13,6 +13,12 @@ public class TestRunner {
       result = JUnitCore.runClasses(LineHandlerTests.class);
       fails += printResult("LineHandler TESTS", result);
 
+      result = JUnitCore.runClasses(MyRectangleTests.class);
+      fails += printResult("MyRectangle TESTS", result);
+
+      result = JUnitCore.runClasses(RectangleHandlerTests.class);
+      fails += printResult("RectangleHandler TESTS", result);
+
       System.out.println();
       System.out.println();
       System.out.println("----------------------------");

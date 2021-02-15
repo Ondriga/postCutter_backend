@@ -134,4 +134,20 @@ public class MyLineTests {
         assertTrue("Try extend with connect line. (New start of horizontal line coordinates[6, 2])", line2.getStartPoint().equals(new Coordinate(6, 2)));
         assertTrue("Try extend with connect line. (New end of horizontal line coordinates[200, 2])", line2.getEndPoint().equals(coor18));
     }
+
+    @Test
+    public void similarTest(){
+        MyLine verticalLine1 = VerticalLine.createLine(new Coordinate(20, 20), new Coordinate(20, 44));
+        MyLine verticalLine2 = VerticalLine.createLine(new Coordinate(10, 40), new Coordinate(10, 88));
+        MyLine horizontalLine1 = HorizontalLine.createLine(new Coordinate(3, 20), new Coordinate(7, 20));
+        MyLine horizontalLine2 = HorizontalLine.createLine(new Coordinate(50, 20), new Coordinate(90, 20));
+
+        assertTrue("Vertical lines are similar.", verticalLine1.isSimilar(line1));
+        assertFalse("Vertical lines are different.", verticalLine2.isSimilar(line1));
+        
+        assertTrue("Horizontal lines are similar", horizontalLine1.isSimilar(line2));
+        assertFalse("Horizontal lines are different", horizontalLine2.isSimilar(line2));
+
+        assertFalse("One line is vertical and second is horizontal.", line1.isSimilar(line2));
+    }
 }
