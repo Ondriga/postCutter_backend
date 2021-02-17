@@ -60,7 +60,7 @@ public class PostCutter extends JFrame{
     private int fileIndex = 0;
     /// Array with paths to pictures
     private static String[] pathNames;
-
+    /// Flag for toggle button
     private boolean flagFinal = false;
 
     /// ArrayList contain classes of edge detection methods
@@ -190,11 +190,13 @@ public class PostCutter extends JFrame{
                 labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
             }else{
                 Cutter cutter = new Cutter(picture);
-                Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
-                printLines(canvas, cutter.getHorizontalLines());
-                printLines(canvas, cutter.getVerticalLines());
-                labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvas), labelChange.getSize()));
-                labelLines.setIcon(getResizedIcon(mat2BufferedImage(getRectanglePrinted(picture, cutter.getRectangle())), labelLines.getSize()));
+                Mat canvasLines = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                Mat canvasRectangle = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                printLines(canvasLines, cutter.getHorizontalLines());
+                printLines(canvasLines, cutter.getVerticalLines());
+                labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasLines), labelChange.getSize()));
+                printRectangle(canvasRectangle, cutter.getRectangle());
+                labelLines.setIcon(getResizedIcon(mat2BufferedImage(canvasRectangle), labelLines.getSize()));
             }
 
         } catch (IOException e) {
@@ -202,22 +204,31 @@ public class PostCutter extends JFrame{
         } 
     }
 
-    private void printLines(Mat picture, List<MyLine> lines){
+    /**
+     * Print lines on canvas.
+     * @param canvas empty canvas for show lines.
+     * @param lines list of lines for show.
+     */
+    private void printLines(Mat canvas, List<MyLine> lines){
         for(MyLine line : lines){
             if(line.getStartPoint().getY() == line.getEndPoint().getY()){
                 for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                    picture.put(line.getStartPoint().getY(), i, 0);
+                    canvas.put(line.getStartPoint().getY(), i, 80);
                 }
             }else{
                 for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                    picture.put(i, line.getStartPoint().getX(), 0);
+                    canvas.put(i, line.getStartPoint().getX(), 80);
                 }
             }
         }
     }
 
-    private Mat getRectanglePrinted(Mat picture, MyRectangle rectangle){
-        Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+    /**
+     * Print rectangle on canvas
+     * @param canvas empty canvas for show rectangle.
+     * @param rectangle for show.
+     */
+    private void printRectangle(Mat canvas, MyRectangle rectangle){
         if(rectangle != null){
             for(int i = rectangle.getCornerA().getX(); i <= rectangle.getCornerB().getX(); i++){
                 canvas.put(rectangle.getCornerA().getY(), i, 0);
@@ -228,42 +239,27 @@ public class PostCutter extends JFrame{
                 canvas.put(i, rectangle.getCornerB().getX(), 0);
             }
         }
-        return canvas;
     }
 
+    /**
+     * Print lines and rectangle on the same canvas.
+     * @param picture change with some of the edge method.
+     * @return canvas with lines and rectangle.
+     */
     private BufferedImage highlightLines(Mat picture){
-        Mat linesMat = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+        Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
         
         LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
         lineHandler.deleteNoise(picture.cols(), picture.rows());
-        for(MyLine line : lineHandler.getHorizontalLines()){
-            for(int i=line.getStartPoint().getX(); i<=line.getEndPoint().getX(); i++){
-                linesMat.put(line.getStartPoint().getY(), i, 80);
-            }
-        }
-        for(MyLine line : lineHandler.getVerticalLines()){
-            for(int i=line.getStartPoint().getY(); i<=line.getEndPoint().getY(); i++){
-                linesMat.put(i, line.getStartPoint().getX(), 80);
-            }
-        }
+        printLines(canvas, lineHandler.getHorizontalLines());
+        printLines(canvas, lineHandler.getVerticalLines());
 
         RectangleHandler rectangleHandler = new RectangleHandler();
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), picture.cols()-1, picture.rows());
-        MyRectangle rectangle = rectangleHandler.getRectangle();
+        printRectangle(canvas, rectangleHandler.getRectangle());
 
-        if(rectangle != null){
-            for(int i = rectangle.getCornerA().getX(); i <= rectangle.getCornerB().getX(); i++){
-                linesMat.put(rectangle.getCornerA().getY(), i, 0);
-                linesMat.put(rectangle.getCornerB().getY(), i, 0);
-            }
-            for(int i = rectangle.getCornerA().getY(); i <= rectangle.getCornerB().getY(); i++){
-                linesMat.put(i, rectangle.getCornerA().getX(), 0);
-                linesMat.put(i, rectangle.getCornerB().getX(), 0);
-            }
-        }
-
-        return mat2BufferedImage(linesMat);
+        return mat2BufferedImage(canvas);
     }
 
     /**
