@@ -1,7 +1,17 @@
+/*
+ * Tests for the backend of Bachelor thesis.
+ * TestRunner class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
+/**
+ * Start all tests for backhand of postCutter and print result to the standard output.
+ */
 public class TestRunner {
    public static void main(String[] args) {
       Result result = JUnitCore.runClasses(CoordinateTests.class);
@@ -30,6 +40,12 @@ public class TestRunner {
       System.out.println("----------------------------");
    }
 
+   /**
+    * Print result to the standard output.
+    * @param testName name of tests.
+    * @param result of tests.
+    * @return number of failed tests.
+    */
    private static int printResult(String testName, Result result){
       System.out.println();
       System.out.println(testName);  

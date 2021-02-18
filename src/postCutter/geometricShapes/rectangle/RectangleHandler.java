@@ -1,3 +1,10 @@
+/*
+ * Source code for the backend of Bachelor thesis.
+ * RectangleHandler class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 package postCutter.geometricShapes.rectangle;
 
 import java.util.ArrayList;
@@ -7,12 +14,25 @@ import java.util.List;
 import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.*;
 
+/**
+ * This class is made for find and store rectangle from lists of horizontal and vertical lines.
+ */
 public final class RectangleHandler {
-    private static final int TRASH_HOLD = 5;
+    /// Constant for allowed empty spaces between lines.
+    private static final int THRESHOLD = 5;
+    /// Constant for min x value of picture.
     private static final int MIN_X = 0;
 
+    /// Rectangle.
     private MyRectangle rectangle = null;
 
+    /**
+     * First finding rectangle, that are on max width of picture. Than try find smaller rectangle. In the end the rectangle is stored.
+     * @param horizontalLines list of horizontal lines.
+     * @param verticalLines list of vertical lines.
+     * @param width of picture.
+     * @param height of picture.
+     */
     public void findRectangle(List<MyLine> horizontalLines, List<MyLine> verticalLines, int width, int height){
         this.rectangle = null;
         List<MyLine> firstHalfLines = new ArrayList<>();
@@ -52,14 +72,33 @@ public final class RectangleHandler {
         this.rectangle = MyRectangle.createRectangle(cornerA, cornerB);
     }
 
+    /**
+     * Check if start x value of line is in allowed interval form value minX.
+     * @param minX left border for line.
+     * @param leftLineX start x value of line.
+     * @return true if x value of line is in allowed interval, otherwise false.
+     */
     private boolean isLeftXCorrect(int minX, int leftLineX){
-        return leftLineX >= minX && leftLineX < minX + TRASH_HOLD;
+        return leftLineX >= minX && leftLineX < minX + THRESHOLD;
     }
 
+    /**
+     * Check if end x value of line is in allowed interval from value maxX.
+     * @param maxX right border for line.
+     * @param rightLineX end x value of line.
+     * @return true if x value of line is in allowed interval, otherwise false.
+     */
     private boolean isRightXCorrect(int maxX, int rightLineX){
-        return rightLineX <= maxX && rightLineX > maxX - TRASH_HOLD;
+        return rightLineX <= maxX && rightLineX > maxX - THRESHOLD;
     }
 
+    /**
+     * Find y value of horizontal line, that start from left side of picture to the right side.
+     * If that line isn`t found, than find line, that start from left side or end on right side of picture.
+     * @param width of picture.
+     * @param horizontalLines list of horizontal lines.
+     * @return y value of horizontal line, that respond conditions. If line didn`t find, than -1.
+     */
     private int getYLimit(int width, List<MyLine> horizontalLines){
         int limitY = -1;
         for(MyLine line : horizontalLines){
@@ -73,6 +112,14 @@ public final class RectangleHandler {
         return limitY;
     }
 
+    /**
+     * Check if exist horizontal line between 2 vertical lines. This horizontal line must be on the end of vertical lines.
+     * @param leftX left border for horizontal lines.
+     * @param rightX right border for horizontal lines.
+     * @param y value for horizontal line.
+     * @param horizontalLines list of horizontal lines.
+     * @return true if line was found, otherwise false.
+     */
     private boolean isYLimitCorrect(int leftX, int rightX, int y, List<MyLine> horizontalLines){
         for(MyLine line : horizontalLines){
             if(line.getStartPoint().getY() == y && (isLeftXCorrect(leftX, line.getStartPoint().getX()) ||
@@ -83,15 +130,22 @@ public final class RectangleHandler {
         return false;
     }
 
+    /**
+     * Finding smaller rectangle, than width of picture.
+     * @param horizontalLines list of horizontal lines.
+     * @param verticalLines list of vertical lines.
+     */
     private void findSmallerRectangle(List<MyLine> horizontalLines, List<MyLine> verticalLines){
         List<MyLine> verticalFirstHalf = verticalLines.subList(0, verticalLines.size()/2);
         List<MyLine> verticalSecondReverseHalf = verticalLines.subList(verticalLines.size()/2, verticalLines.size());
         Collections.reverse(verticalSecondReverseHalf);
-        for(MyLine line1 : verticalFirstHalf){
-            for(MyLine line2 : verticalSecondReverseHalf){
+        for(MyLine line1 : verticalFirstHalf){ //Finding left side of rectangle.
+            for(MyLine line2 : verticalSecondReverseHalf){ //Finding right side of rectangle.
                 if(line1.isSimilar(line2)){
                     int startY = Math.max(line1.getStartPoint().getY(), line2.getStartPoint().getY());
                     int endY = Math.max(line1.getEndPoint().getY(), line2.getEndPoint().getY());
+                    
+                    //Finding top and bottom side of rectangle.
                     if(isYLimitCorrect(line1.getStartPoint().getX(), line2.getStartPoint().getX(), startY, horizontalLines) &&
                     isYLimitCorrect(line1.getStartPoint().getX(), line2.getStartPoint().getX(), endY, horizontalLines)){
                         Coordinate cornerA = new Coordinate(line1.getStartPoint().getX(), startY);
@@ -104,6 +158,10 @@ public final class RectangleHandler {
         }
     }
 
+    /**
+     * Getter for rectangle.
+     * @return rectangle.
+     */
     public MyRectangle getRectangle() {
         return rectangle;
     }

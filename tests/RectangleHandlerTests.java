@@ -1,3 +1,10 @@
+/*
+ * Tests for the backend of Bachelor thesis.
+ * RectangleHandlerTests class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -12,6 +19,9 @@ import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.LineHandler;
 import postCutter.geometricShapes.rectangle.RectangleHandler;
 
+/**
+ * Tests for RectangleHandler class.
+ */
 public class RectangleHandlerTests {
     static{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -21,6 +31,9 @@ public class RectangleHandlerTests {
     LineHandler lineHandler = new LineHandler();
     RectangleHandler rectangleHandler = new RectangleHandler();
 
+    /**
+     * Test for find rectangle, that is from left side to right side of canvas.
+     */
     @Test
     public void rectangleOnEdgeTest(){
         for(int i=0; i<50; i++){
@@ -35,6 +48,9 @@ public class RectangleHandlerTests {
         assertEquals("Corner B wasn`t [49, 40].", new Coordinate(49, 40), rectangleHandler.getRectangle().getCornerB());
     }
 
+    /**
+     * Test for find rectangle smaller, than width of canvas.
+     */
     @Test
     public void smallRectangleTest(){
         for(int i=5; i<=40; i++){

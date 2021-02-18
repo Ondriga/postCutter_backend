@@ -1,3 +1,10 @@
+/*
+ * Tests for the backend of Bachelor thesis.
+ * MyLineTests class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,6 +16,9 @@ import org.junit.Test;
 import postCutter.geometricShapes.line.*;
 import postCutter.geometricShapes.Coordinate;
 
+/**
+ * Tests for MyLine, HorizontalLine and VerticalLine classes.
+ */
 public class MyLineTests {
     Coordinate coor1 = new Coordinate(5, 20);
     Coordinate coor2 = new Coordinate(5, 40);
@@ -33,6 +43,9 @@ public class MyLineTests {
     MyLine line2 = HorizontalLine.createLine(coor3, coor4);
     MyLine linedot = VerticalLine.createLine(coor1, coor1);
 
+    /**
+     * Test for create vertical and horizontal lines.
+     */
     @Test
     public void createMyLineTest(){
         assertNotNull("Test if create was successful (vertical line)", line1);
@@ -41,6 +54,9 @@ public class MyLineTests {
         assertNotNull("Test if create was successful (dot)", linedot);
     }
 
+    /**
+     * Test for correct order of coordinates in lines.
+     */
     @Test
     public void coordinateOrderTest(){
         MyLine line3 = VerticalLine.createLine(coor2, coor1);
@@ -59,12 +75,18 @@ public class MyLineTests {
         assertTrue("Bad ending point (horizontal line, create with wrong order)", line4.getEndPoint().equals(coor4));
     }
     
+    /**
+     * Test for length of lines.
+     */
     @Test
     public void lineLengthTest(){
         assertEquals("List size test", 21, line1.length());
         assertEquals("List size test", 2, line2.length());
     }
 
+    /**
+     * Test for extend lines by dot.
+     */
     @Test
     public void extendLineByDotTest(){
         assertFalse("Try extend with wrong coordinate. (vertical line coordinates[5, 20][5, 40], new coordinate[4, 35])", line1.extendByOne(new Coordinate(4, 35)));
@@ -97,6 +119,9 @@ public class MyLineTests {
         assertTrue("End point wasn`t changed after successful extend by one. (from dot to horizontal line)", lineDotHorizontal.getEndPoint().equals(new Coordinate(6, 20)));
     }
 
+    /**
+     * Test for extend vertical lines by lines.
+     */
     @Test
     public void extendLineByLineTestForVertical(){
         MyLine vertical1 = VerticalLine.createLine(coor6, coor7);
@@ -116,8 +141,11 @@ public class MyLineTests {
         assertTrue("Try extend with connect line. (New end of vertical line coordinates[7, 200])", line1.getEndPoint().equals(coor11));
     }
 
+    /**
+     * Test for extend horizontal lines by lines.
+     */
     @Test
-    public void extendLineByLineTestForHorizontall(){
+    public void extendLineByLineTestForHorizontal(){
         MyLine horizontal1 = HorizontalLine.createLine(coor12, coor13);
         MyLine horizontal2 = HorizontalLine.createLine(coor14, coor15);
         MyLine horizontal3 = HorizontalLine.createLine(coor4, coor16);
@@ -135,6 +163,9 @@ public class MyLineTests {
         assertTrue("Try extend with connect line. (New end of horizontal line coordinates[200, 2])", line2.getEndPoint().equals(coor18));
     }
 
+    /**
+     * Test for check similarity of lines. 
+     */
     @Test
     public void similarTest(){
         MyLine verticalLine1 = VerticalLine.createLine(new Coordinate(20, 20), new Coordinate(20, 44));

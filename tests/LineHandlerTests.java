@@ -1,3 +1,10 @@
+/*
+ * Tests for the backend of Bachelor thesis.
+ * LineHandlerTests class
+ * 
+ * (C) Patrik Ondriga (xondri08)
+ */
+
 import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.LineHandler;
 import postCutter.geometricShapes.line.MyLine;
@@ -14,6 +21,9 @@ import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
 import org.opencv.core.Core;
 
+/**
+ * Tests for LineHandler class.
+ */
 public class LineHandlerTests {
     static{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -23,6 +33,9 @@ public class LineHandlerTests {
     Mat mat2 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
     LineHandler lineHandler = new LineHandler();
 
+    /**
+     * Test for find horizontal line.
+     */
     @Test
     public void horizontalLineTest(){
         mat1.put(0, 2, 255);
@@ -40,6 +53,9 @@ public class LineHandlerTests {
         assertTrue("End point of horizontal line wasn`t [4, 1]", list.get(0).getEndPoint().equals(new Coordinate(4, 1))); 
     }
 
+    /**
+     * Test for find vertical line.
+     */
     @Test
     public void verticalLineTest(){
         mat1.put(0, 1, 255);
@@ -58,6 +74,9 @@ public class LineHandlerTests {
         assertTrue("End point of vertical line wasn`t [1, 4]", list.get(0).getEndPoint().equals(new Coordinate(1, 4)));
     }
 
+    /**
+     * Test for find horizontal and horizontal lines at the same time. 
+     */
     @Test
     public void veticalHorizontalLinesTest(){
         mat1.put(0, 2, 255);
@@ -82,6 +101,9 @@ public class LineHandlerTests {
         assertTrue("End point of vertical line wasn`t [2, 4]", listVertical.get(0).getEndPoint().equals(new Coordinate(2, 4)));
     }
 
+    /**
+     * Test for extend horizontal line by line.
+     */
     @Test
     public void extendLineByLineHorizontal(){
         for(int i=0; i<=4; i++){
@@ -100,6 +122,9 @@ public class LineHandlerTests {
         assertTrue("End point of horizontal line wasn`t [7, 2]", list.get(0).getEndPoint().equals(new Coordinate(7, 2)));
     }
 
+    /**
+     * Test for extend vertical line by line.
+     */
     @Test
     public void extendLineByLineVertical(){
         for(int i=0; i<=6; i++){
@@ -118,6 +143,9 @@ public class LineHandlerTests {
         assertTrue("End point of vertical line wasn`t [0, 7]", list.get(0).getEndPoint().equals(new Coordinate(0, 7)));
     }
 
+    /**
+     * Test for remove small lines from list.
+     */
     @Test
     public void removeNoise(){
         for(int i=0; i<=5; i++){
@@ -134,6 +162,9 @@ public class LineHandlerTests {
         assertEquals("List size test after remove noise", 1, lineHandler.getVerticalLines().size());
     }
 
+    /**
+     * Test for connect 3 horizontal lines.
+     */
     @Test
     public void connect3HorizontalLines(){
         for(int i=0; i<=5; i++){
@@ -156,6 +187,9 @@ public class LineHandlerTests {
         assertTrue("End point of horizontal line wasn`t [19, 0]", list.get(0).getEndPoint().equals(new Coordinate(19, 0)));
     }
 
+    /**
+     * Test for connect 3 vertical lines.
+     */
     @Test
     public void connect3VerticalLines(){
         for(int i=0; i<=5; i++){
@@ -177,6 +211,9 @@ public class LineHandlerTests {
         assertTrue("End point of vertical line wasn`t [0, 19]", list.get(0).getEndPoint().equals(new Coordinate(0, 19)));
     }
 
+    /**
+     * Test for connect 2 same vertical lines but with different x value.
+     */
     @Test
     public void VerticalLinesNearEachOther(){
         for(int i=0; i<=5; i++){
@@ -193,6 +230,9 @@ public class LineHandlerTests {
         assertTrue("End point of vertical line wasn`t [0, 5]", list.get(0).getEndPoint().equals(new Coordinate(0, 5)));
     }
 
+    /**
+     * Test for connect 2 same horizontal lines but with different y value.
+     */
     @Test
     public void HorizontalLinesNearEachOther(){
         for(int i=0; i<=5; i++){
@@ -209,6 +249,9 @@ public class LineHandlerTests {
         assertTrue("End point of horizontal line wasn`t [5, 0]", list.get(0).getEndPoint().equals(new Coordinate(5, 0)));
     }
 
+    /**
+     * Test for 2 horizontal lines, that covering each other.
+     */
     @Test
     public void HorizontalCover(){
         for(int i=10; i<=15; i++){
@@ -228,6 +271,9 @@ public class LineHandlerTests {
         assertTrue("End point of horizontal line wasn`t [30, 0]", list.get(0).getEndPoint().equals(new Coordinate(30, 0)));
     }
 
+    /**
+     * Test for horizontal lines, that are on different canvases.
+     */
     @Test
     public void HorizontalMultipleSameLines(){
         Mat mat3 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
@@ -263,6 +309,9 @@ public class LineHandlerTests {
         assertTrue("End point of second horizontal line wasn`t [17, 10]", list.get(1).getEndPoint().equals(new Coordinate(17, 10)));
     }
 
+    /**
+     * Test for finding vertical lines from rectangle.
+     */
     @Test
     public void identicalLinesTest(){
         for(int i=5; i<=40; i++){
