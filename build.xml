@@ -54,6 +54,20 @@
             </java>
         </target>
 
+        <target name="compileFinal" depends="clean">
+            <mkdir dir="${classes.dir}"/>
+            <javac classpathref="classpath" includeantruntime="true" srcdir="${src.dir}/postCutter" destdir="${classes.dir}"/>
+        </target>
+
+        <target name="final" depends="compileFinal">
+            <mkdir dir="${jar.dir}"/>
+            <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+                <manifest>
+                    <attribute name="Main-Class" value="${main-class}"/>
+                </manifest>
+            </jar>
+        </target>
+
         <target name="rebuild" depends="clean,jar"/>
 
         <target name="rebuild-run" depends="clean,run"/>
