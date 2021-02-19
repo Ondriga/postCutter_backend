@@ -8,7 +8,6 @@
 package postCutter.geometricShapes.line;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.opencv.core.Mat;
@@ -20,9 +19,9 @@ import postCutter.geometricShapes.Coordinate;
  */
 public final class LineHandler {
     /// List of vertical lines found in picture.
-    private List<VerticalLine> verticalLines = new ArrayList<>();
+    private List<MyLine> verticalLines = new ArrayList<>();
     /// List of horizontal lines found in picture.
-    private List<HorizontalLine> horizontalLines = new ArrayList<>();
+    private List<MyLine> horizontalLines = new ArrayList<>();
 
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
@@ -45,7 +44,7 @@ public final class LineHandler {
             for(int i=0; i<rows; i++){
                 if(picture.get(i, j)[0] > THRESHOLD_COLOR){
                     if(j+1<cols && picture.get(i, j+1)[0] > THRESHOLD_COLOR){
-                        addHorizontalLine(findHorizontalLine(new Coordinate(j, i), picture));
+                        addLine(findHorizontalLine(new Coordinate(j, i), picture), this.horizontalLines);
                     }
                 }
             }
@@ -56,7 +55,7 @@ public final class LineHandler {
             for (int j=0; j<cols; j++){
                 if(pictureClone.get(i, j)[0] > THRESHOLD_COLOR){
                     if(i+1< rows && pictureClone.get(i+1, j)[0] > THRESHOLD_COLOR){
-                        addVerticalLine(findVerticalLine(new Coordinate(j, i), pictureClone));
+                        addLine(findVerticalLine(new Coordinate(j, i), pictureClone), this.verticalLines);
                     }
                 }
             }
@@ -64,13 +63,13 @@ public final class LineHandler {
     }
 
     /**
-     * Check if y value is from picture.
-     * @param y value.
-     * @param maxY max y value of picture.
-     * @return true if y is in interval <0, maxY>, otherwise false.
+     * Check if x or y value is in picture.
+     * @param value x or y value.
+     * @param maxValue max x or y value of picture.
+     * @return true if value is in interval <0, maxValue>, otherwise false.
      */
-    private boolean isYInPicture(int y, int maxY){
-        return y >= 0 && y <= maxY;
+    private boolean isValueInPicture(int value, int maxValue){
+        return value >= 0 && value <= maxValue;
     }
 
     /**
@@ -83,7 +82,7 @@ public final class LineHandler {
     private boolean checkPixelYWay(int x, int y, Mat picture){
         boolean found = false;
         for(int i=-1 * ALLOW_POSITION_MOVE; i<=ALLOW_POSITION_MOVE; i++){
-            if(!isYInPicture(y+i, picture.rows()-1)){
+            if(!isValueInPicture(y+i, picture.rows()-1)){
                 continue;
             }
             if(picture.get(y+i, x)[0] > THRESHOLD_COLOR){
@@ -124,36 +123,27 @@ public final class LineHandler {
     }
 
     /**
-     * Add line into list of horizontal lines or merge with one of line in this list.
-     * @param line new line, which is supposed to be add to list of horizontal lines.
+     * Add line into list of lines or merge with one of line in this list.
+     * @param newLine new line, which is supposed to be add to list of lines.
+     * @param lines list of lines.
      */
-    private void addHorizontalLine(HorizontalLine line){
-        if(line != null){
-            for(int i=0; i<this.horizontalLines.size(); i++){
-                switch(this.horizontalLines.get(i).extendByLine(line)){
+    private void addLine(MyLine newLine, List<MyLine> lines){
+        if(newLine != null){
+            for(int i=0; i<lines.size(); i++){
+                switch(lines.get(i).extendByLine(newLine)){
                     case -1:
                         break;
                     case 0:
-                        line = this.horizontalLines.get(i);
-                        this.horizontalLines.remove(i--);
+                        newLine = lines.get(i);
+                        lines.remove(i--);
                         break;
                     default:
-                        this.horizontalLines.add(i, line);
+                        lines.add(i, newLine);
                         return;
                 }
             }
-            this.horizontalLines.add(line);
+            lines.add(newLine);
         }
-    }
-
-    /**
-     * Check if x value is from picture.
-     * @param x value.
-     * @param maxX max x value of picture.
-     * @return true if x is in interval <0, maxX>, otherwise false.
-     */
-    private boolean isXInPicture(int x, int maxX){
-        return x >= 0 && x <= maxX;
     }
 
     /**
@@ -166,7 +156,7 @@ public final class LineHandler {
     private boolean checkPixelXWay(int x, int y, Mat picture){
         boolean found = false;
         for(int i=-1 * ALLOW_POSITION_MOVE; i<=ALLOW_POSITION_MOVE; i++){
-            if(!isXInPicture(x+i, picture.cols()-1)){
+            if(!isValueInPicture(x+i, picture.cols()-1)){
                 continue;
             }
             if(picture.get(y, x+i)[0] > THRESHOLD_COLOR){
@@ -204,29 +194,6 @@ public final class LineHandler {
             return line;
         }
         return null;
-    }
-
-    /**
-     * Add line into list of vertical lines or merge with one of line in this list.
-     * @param line new line, which is supposed to be add to list of vertical lines.
-     */
-    private void addVerticalLine(VerticalLine line){
-        if(line != null){
-            for(int i=0; i<this.verticalLines.size(); i++){
-                switch(this.verticalLines.get(i).extendByLine(line)){
-                    case -1:
-                        break;
-                    case 0:
-                        line = this.verticalLines.get(i);
-                        this.verticalLines.remove(i--);
-                        break;
-                    default:
-                        this.verticalLines.add(i, line);
-                        return;
-                }
-            }
-            this.verticalLines.add(line);
-        }
     }
 
     /**
