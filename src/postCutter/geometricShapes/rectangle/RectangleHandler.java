@@ -165,4 +165,11 @@ public final class RectangleHandler {
     public MyRectangle getRectangle() {
         return rectangle;
     }
+
+    /**
+     * This method clear rectangle.
+     */
+    public void clear(){
+        this.rectangle = null;
+    }
 }

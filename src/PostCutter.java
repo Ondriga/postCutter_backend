@@ -189,7 +189,8 @@ public class PostCutter extends JFrame{
                 labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
                 labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
             }else{
-                Cutter cutter = new Cutter(picture);
+                Cutter cutter = new Cutter();
+                cutter.findCut(picture);
                 Mat canvasLines = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
                 Mat canvasRectangle = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
                 printLines(canvasLines, cutter.getHorizontalLines());

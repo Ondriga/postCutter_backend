@@ -31,14 +31,19 @@ public class Cutter {
 
     /**
      * Constructor.
-     * @param picture for which is cut suggestion.
      */
-    public Cutter(Mat picture){
+    public Cutter(){
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
         edgeMethods.add(new Canny("CANNY"));
+    }
 
+    /**
+     * Find cut for picture. This method find vertical, horizontal lines and rectangle for final cut.
+     * @param picture for which is cut suggestion.
+     */
+    public void findCut(Mat picture){
         for(EdgeDetector edgeMethod : edgeMethods){
             lineHandler.findLines(edgeMethod.highlightEdge(picture));
         }
@@ -68,5 +73,13 @@ public class Cutter {
      */
     public MyRectangle getRectangle(){
         return rectangleHandler.getRectangle();
+    }
+
+    /**
+     * This method clear all lines and rectangle.
+     */
+    public void clear(){
+        this.lineHandler.clear();
+        this.rectangleHandler.clear();
     }
 }

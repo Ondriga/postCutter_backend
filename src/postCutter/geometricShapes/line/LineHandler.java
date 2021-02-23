@@ -221,4 +221,12 @@ public final class LineHandler {
     public List<MyLine> getVerticalLines(){
         return new ArrayList<>(this.verticalLines);
     }
+
+    /**
+     * This method clear horizontal and vertical lists of lines.
+     */
+    public void clear(){
+        this.horizontalLines.clear();
+        this.verticalLines.clear();
+    }
 }
