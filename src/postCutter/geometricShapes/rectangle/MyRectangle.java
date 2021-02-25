@@ -56,4 +56,20 @@ public class MyRectangle {
     public Coordinate getCornerB(){
         return cornerB;
     }
+
+    /**
+     * Setter for cornerA.
+     * @param cornerA new cornerA.
+     */
+    public void setCornerA(Coordinate cornerA){
+        this.cornerA = cornerA;
+    }
+
+    /**
+     * Setter for cornerB.
+     * @param cornerB new cornerB.
+     */
+    public void setCornerB(Coordinate cornerB){
+        this.cornerB = cornerB;
+    }
 }
