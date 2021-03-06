@@ -37,19 +37,6 @@ public abstract class EdgeDetector{
     public abstract Mat highlightEdge(Mat picture);
 
     /**
-     * Change color picture into grayscale picture.
-     * @param sourceImage picture path
-     * @return grayscale matrix
-     */
-    public static Mat getGrayScale(String sourceImage){
-        Mat srcImg = Imgcodecs.imread(sourceImage);
-        Mat grayImg = new Mat(srcImg.rows(), srcImg.cols(), srcImg.type());
-
-        Imgproc.cvtColor(srcImg, grayImg, Imgproc.COLOR_RGB2GRAY);
-        return grayImg;
-    }
-
-    /**
      * Getter for "methodName"
      * @return method name
      */

@@ -10,9 +10,12 @@ package postCutter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 import postCutter.edgeDetection.*;
+import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.LineHandler;
 import postCutter.geometricShapes.line.MyLine;
 import postCutter.geometricShapes.rectangle.MyRectangle;
@@ -29,10 +32,14 @@ public class Cutter {
     /// Rectangle handler.
     private RectangleHandler rectangleHandler = new RectangleHandler();
 
+    private Mat picture = null;
+
     /**
      * Constructor.
      */
     public Cutter(){
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
@@ -40,15 +47,28 @@ public class Cutter {
     }
 
     /**
-     * Find cut for picture. This method find vertical, horizontal lines and rectangle for final cut.
-     * @param picture for which is cut suggestion.
+     * Setter for original picture.
+     * @param picture for cut suggestion.
      */
-    public void findCut(Mat picture){
-        for(EdgeDetector edgeMethod : edgeMethods){
-            lineHandler.findLines(edgeMethod.highlightEdge(picture));
+    public void loadPicture(Mat picture){
+        clear();
+        this.picture = picture;
+        findCut();
+    }
+
+    /**
+     * Find cut for picture. This method find vertical, horizontal lines and rectangle for final cut.
+     */
+    private void findCut(){
+        if(this.picture != null){
+            Mat grayScale = new Mat();
+            Imgproc.cvtColor(this.picture, grayScale, Imgproc.COLOR_RGB2GRAY);
+            for(EdgeDetector edgeMethod : edgeMethods){
+                lineHandler.findLines(edgeMethod.highlightEdge(grayScale));
+            }
+            lineHandler.deleteNoise(grayScale.cols(), grayScale.rows());
+            rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());
         }
-        lineHandler.deleteNoise(picture.cols(), picture.rows());
-        rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), picture.cols(), picture.rows());
     }
 
     /**
@@ -81,5 +101,19 @@ public class Cutter {
     public void clear(){
         this.lineHandler.clear();
         this.rectangleHandler.clear();
+        this.picture = null;
+    }
+
+    /**
+     * Get cropped picture by rectangle.
+     * @return null if original picture is null, otherwise cropped picture by rectangle.
+     */
+    public Mat getCroppedImage(){
+        if(this.picture == null){
+            return null;
+        }
+        Coordinate cornerA = rectangleHandler.getRectangle().getCornerA();
+        Coordinate cornerB = rectangleHandler.getRectangle().getCornerB();
+        return this.picture.submat(cornerA.getY()+1, cornerB.getY()-1, cornerA.getX()+1, cornerB.getX()-1);
     }
 }

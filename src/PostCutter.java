@@ -10,8 +10,10 @@ import postCutter.edgeDetection.*;
 import postCutter.geometricShapes.line.*;
 import postCutter.geometricShapes.rectangle.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,10 @@ import javax.swing.WindowConstants;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -61,7 +66,7 @@ public class PostCutter extends JFrame{
     /// Array with paths to pictures
     private static String[] pathNames;
     /// Flag for toggle button
-    private boolean flagFinal = false;
+    private int flagFinal = 0;
 
     /// ArrayList contain classes of edge detection methods
     private List<EdgeDetector> edgeMethods = new ArrayList<>();
@@ -110,7 +115,7 @@ public class PostCutter extends JFrame{
     private void setUpGuiComponents(){
         JButton buttonPrevious = new JButton("PREV");
         JButton buttonNext = new JButton("NEXT");
-        JButton buttonFinal = new JButton("Final");
+        JButton buttonFinal = new JButton("FINAL");
         buttonNext.addActionListener(e -> changeImage(1));
         buttonPrevious.addActionListener(e -> changeImage(-1));
         buttonFinal.addActionListener(e -> toggleFinal(buttonFinal));
@@ -136,13 +141,25 @@ public class PostCutter extends JFrame{
         panelImages.add(labelLines);
     }
 
+    /**
+     * Work like circlet buffer. Change button that change view for user between method output, line and rectangle and final crop.
+     * @param button that do view change.
+     */
     private void toggleFinal(JButton button){
-        if(this.flagFinal){
-            button.setText("FINAL");
-        }else{
-            button.setText("METHODS");
-        }
-        this.flagFinal = !this.flagFinal;
+        switch(this.flagFinal){
+            case 0:
+                button.setText("CROP");
+                this.flagFinal = 1;
+                break;
+            case 1:
+                button.setText("METHODS");
+                this.flagFinal = 2;
+                break;
+            default:
+                button.setText("FINAL");
+                this.flagFinal = 0;
+                break;
+        }        
         changeImage(0);
     }
 
@@ -180,26 +197,38 @@ public class PostCutter extends JFrame{
         }
         String path = "screenshots/" + pathNames[fileIndex];
         BufferedImage img = null;
-        try {
+        try {      
             img = ImageIO.read(new File(path));
             labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
-            Mat picture = EdgeDetector.getGrayScale(path);
-            if(!flagFinal){
-                Mat pictureChange = edgeDetector.highlightEdge(picture);
-                labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
-                labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
-            }else{
-                Cutter cutter = new Cutter();
-                cutter.findCut(picture);
-                Mat canvasLines = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
-                Mat canvasRectangle = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
-                printLines(canvasLines, cutter.getHorizontalLines());
-                printLines(canvasLines, cutter.getVerticalLines());
-                labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasLines), labelChange.getSize()));
-                printRectangle(canvasRectangle, cutter.getRectangle());
-                labelLines.setIcon(getResizedIcon(mat2BufferedImage(canvasRectangle), labelLines.getSize()));
+            Mat picture = Imgcodecs.imread(path);
+            Cutter cutter = new Cutter();
+            switch(this.flagFinal){
+                case 0:
+                    Mat grayScale = new Mat();
+                    Imgproc.cvtColor(picture, grayScale, Imgproc.COLOR_RGB2GRAY);
+                    Mat pictureChange = edgeDetector.highlightEdge(grayScale);
+                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
+                    labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
+                    break;
+                case 1:
+                    cutter.loadPicture(picture.clone());
+                    Mat canvasLines = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                    Mat canvasRectangle = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                    printLines(canvasLines, cutter.getHorizontalLines());
+                    printLines(canvasLines, cutter.getVerticalLines());
+                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasLines), labelChange.getSize()));
+                    printRectangle(canvasRectangle, cutter.getRectangle());
+                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(canvasRectangle), labelLines.getSize()));
+                    break;
+                default:
+                    cutter.loadPicture(picture.clone());
+                    Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
+                    printLines(canvas, cutter.getHorizontalLines());
+                    printLines(canvas, cutter.getVerticalLines());
+                    printRectangle(canvas, cutter.getRectangle());
+                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvas), labelChange.getMaximumSize()));
+                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(cutter.getCroppedImage()), labelLines.getSize()));
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } 
@@ -282,18 +311,18 @@ public class PostCutter extends JFrame{
      * @return new dimension for picture
      */
     private Dimension getDimension(Dimension labelDimension, Dimension imageDimension){
-        double newWidth = 0;
-        double newHeight = 0;
+        double newWidth = imageDimension.getWidth();
+        double newHeight = imageDimension.getHeight();
         double ration;
-        // If picture is oriented landscape.
-        if(imageDimension.getWidth() > imageDimension.getHeight()){
+        if(newWidth > labelDimension.getWidth()){
+            ration = newWidth / labelDimension.getWidth();
             newWidth = labelDimension.getWidth();
-            ration = imageDimension.getWidth() / labelDimension.getWidth();
-            newHeight = imageDimension.getHeight() / ration;
-        }else{
+            newHeight = newHeight / ration;
+        }
+        if(newHeight > labelDimension.getHeight()){
+            ration = newHeight / labelDimension.getHeight();
+            newWidth = newWidth / ration;
             newHeight = labelDimension.getHeight();
-            ration = imageDimension.getHeight() / labelDimension.getHeight();
-            newWidth = imageDimension.getWidth() / ration;
         }
         Dimension dimension = new Dimension();
         dimension.setSize(newWidth, newHeight);
@@ -302,24 +331,25 @@ public class PostCutter extends JFrame{
 
     /**
      * Convert "Mat" into "BufferedImage"
+     * Taken from https://www.tutorialspoint.com/how-to-convert-opencv-mat-object-to-bufferedimage-object-using-java
+     * @author Krishna Kasyap
      * @param mat picture stored like matrix
      * @return picture stored like BufferedImage
      */
     public static BufferedImage mat2BufferedImage(Mat mat){
-        int type = 0;
-        if (mat.channels() == 1) {
-            type = BufferedImage.TYPE_BYTE_GRAY;
-        } else if (mat.channels() == 3) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        } else {
-            return null;
+        //Encoding the image
+        MatOfByte matOfByte = new MatOfByte();
+        Imgcodecs.imencode(".jpg", mat, matOfByte);
+        //Storing the encoded Mat in a byte array
+        byte[] byteArray = matOfByte.toArray();
+        //Preparing the Buffered Image
+        InputStream in = new ByteArrayInputStream(byteArray);
+        BufferedImage bufImage = null;
+        try {
+            bufImage = ImageIO.read(in);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        int imageDataLength = mat.channels()*mat.rows()*mat.cols();
-        byte [] buffer = new byte[imageDataLength];
-        mat.get(0, 0, buffer);
-        BufferedImage grayImage = new BufferedImage(mat.width(), mat.height(), type);
-        grayImage.getRaster().setDataElements(0, 0, mat.cols(), mat.rows(), buffer);
-
-        return grayImage;
+        return bufImage;
     }
 }

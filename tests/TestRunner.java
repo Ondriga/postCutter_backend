@@ -29,6 +29,9 @@ public class TestRunner {
       result = JUnitCore.runClasses(RectangleHandlerTests.class);
       fails += printResult("RectangleHandler TESTS", result);
 
+      result = JUnitCore.runClasses(CutterTests.class);
+      fails += printResult("Cutter TESTS", result);
+
       System.out.println();
       System.out.println();
       System.out.println("----------------------------");
