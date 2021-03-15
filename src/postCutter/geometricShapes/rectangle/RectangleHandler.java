@@ -34,7 +34,7 @@ public final class RectangleHandler {
      * @param height of picture.
      */
     public void findRectangle(List<MyLine> horizontalLines, List<MyLine> verticalLines, int width, int height){
-        this.rectangle = null;
+        this.rectangle = MyRectangle.createRectangle(new Coordinate(0, 0), new Coordinate(width - 1, height - 1));
         List<MyLine> firstHalfLines = new ArrayList<>();
         List<MyLine> secondHalfLines = new ArrayList<>();
         for(MyLine line : horizontalLines){

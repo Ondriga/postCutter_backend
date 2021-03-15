@@ -43,7 +43,6 @@ public class RectangleHandlerTests {
         lineHandler.findLines(mat);
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
-        assertNotNull("Rectangle wasn`t found.", rectangleHandler.getRectangle());
         assertEquals("Corner A wasn`t [0, 10].", new Coordinate(0, 10), rectangleHandler.getRectangle().getCornerA());
         assertEquals("Corner B wasn`t [49, 40].", new Coordinate(49, 40), rectangleHandler.getRectangle().getCornerB());
     }
@@ -65,8 +64,20 @@ public class RectangleHandlerTests {
 
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
-        assertNotNull("Rectangle wasn`t found.", rectangleHandler.getRectangle());
         assertEquals("Corner A wasn`t [5, 10].", new Coordinate(5, 10), rectangleHandler.getRectangle().getCornerA());
         assertEquals("Corner B wasn`t [40, 40].", new Coordinate(40, 40), rectangleHandler.getRectangle().getCornerB());
+    }
+
+    /**
+     * Test where rectangle wasn`t find.
+     */
+    @Test
+    public void emptyCanvasTest(){
+        lineHandler.findLines(mat);
+
+        rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
+
+        assertEquals("Corner A wasn`t [0, 0].", new Coordinate(0, 0), rectangleHandler.getRectangle().getCornerA());
+        assertEquals("Corner B wasn`t [40, 40].", new Coordinate(49, 49), rectangleHandler.getRectangle().getCornerB());
     }
 }
