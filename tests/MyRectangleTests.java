@@ -5,6 +5,7 @@
  * (C) Patrik Ondriga (xondri08)
  */
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -28,5 +29,15 @@ public class MyRectangleTests {
         assertNotNull("Corect corner coordinates.", MyRectangle.createRectangle(corner1, corner2));
         assertNull("Corner coordinates are the same.", MyRectangle.createRectangle(corner1, corner1));
         assertNull("Wrong order of corners.", MyRectangle.createRectangle(corner2, corner1));
+    }
+
+    /**
+     * Test for width and height of rectangle.
+     */
+    @Test
+    public void widthHeightTest(){
+        MyRectangle rectangle = MyRectangle.createRectangle(corner1, corner2);
+        assertEquals("Rectangle width test", 16, rectangle.getWidth());
+        assertEquals("Rectangle height test", 16, rectangle.getHeight());
     }
 }

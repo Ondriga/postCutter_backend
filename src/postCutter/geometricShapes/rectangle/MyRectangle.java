@@ -72,4 +72,20 @@ public class MyRectangle {
     public void setCornerB(Coordinate cornerB){
         this.cornerB = cornerB;
     }
+
+    /**
+     * Getter for width of rectangle.
+     * @return rectangle width
+     */
+    public int getWidth(){
+        return cornerB.getX() - cornerA.getX() + 1;
+    }
+
+    /**
+     * Getter for height of rectangle.
+     * @return rectangle height
+     */
+    public int getHeight(){
+        return cornerB.getY() - cornerA.getY() + 1;
+    }
 }
