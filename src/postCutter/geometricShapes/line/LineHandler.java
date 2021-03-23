@@ -202,8 +202,21 @@ public final class LineHandler {
      * @param height of picture.
      */
     public void deleteNoise(int width, int height){
-        this.horizontalLines.removeIf(o -> (o.length() < width/3));
-        this.verticalLines.removeIf(o -> (o.length() < height/5));
+        deleteShortLines(this.horizontalLines, width/3);
+        deleteShortLines(this.verticalLines, height/5);
+    }
+
+    /**
+     * Delete all lines from list, that are shorter than length.
+     * @param lines list of lines.
+     * @param length required length.
+     */
+    private void deleteShortLines(List<MyLine> lines, int length){
+        for(MyLine line : lines){
+            if(line.length() < length){
+                lines.remove(line);
+            }
+        }
     }
 
     /**
