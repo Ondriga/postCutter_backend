@@ -7,10 +7,7 @@
 
 package postCutter.edgeDetection;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
 /**
  * Representing interface for all edge detection class.
@@ -26,7 +23,6 @@ public abstract class EdgeDetector{
      */
     public EdgeDetector(String methodName){
         this.methodName = methodName;
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
     /**

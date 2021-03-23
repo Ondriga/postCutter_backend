@@ -19,16 +19,11 @@ import org.junit.Test;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
-import org.opencv.core.Core;
 
 /**
  * Tests for LineHandler class.
  */
 public class LineHandlerTests {
-    static{
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
     Mat mat1 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
     Mat mat2 = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
     LineHandler lineHandler = new LineHandler();

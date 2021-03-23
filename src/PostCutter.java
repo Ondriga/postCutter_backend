@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -73,6 +74,10 @@ public class PostCutter extends JFrame{
     /// Actual using edge detection method object 
     private EdgeDetector edgeDetector;
 
+    static{
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+    
     public static void main(String[] args){
         File f = new File("screenshots");
         pathNames = f.list();

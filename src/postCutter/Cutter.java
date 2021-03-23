@@ -10,7 +10,6 @@ package postCutter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
@@ -38,8 +37,6 @@ public class Cutter {
      * Constructor.
      */
     public Cutter(){
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));

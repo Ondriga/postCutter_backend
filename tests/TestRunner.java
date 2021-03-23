@@ -9,11 +9,15 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
+import org.opencv.core.Core;
+
 /**
  * Start all tests for backhand of postCutter and print result to the standard output.
  */
 public class TestRunner {
    public static void main(String[] args) {
+      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
       Result result = JUnitCore.runClasses(CoordinateTests.class);
       int fails = printResult("COORDINATE TESTS", result);
 

@@ -13,19 +13,13 @@ import org.junit.Test;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
-import org.opencv.core.Core;
 
 import postCutter.Cutter;
-import postCutter.geometricShapes.Coordinate;
 
 /**
  * Tests for Cutter class.
  */
 public class CutterTests {
-    static{
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
     Cutter cutter = new Cutter();
     Mat mat = new Mat(100, 100, CvType.CV_8UC3, new Scalar(0, 0, 0));
 

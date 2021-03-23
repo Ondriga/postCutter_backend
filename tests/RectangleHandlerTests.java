@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
-import org.opencv.core.Core;
 
 import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.LineHandler;
@@ -23,10 +22,6 @@ import postCutter.geometricShapes.rectangle.RectangleHandler;
  * Tests for RectangleHandler class.
  */
 public class RectangleHandlerTests {
-    static{
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
     Mat mat = new Mat(50, 50, CvType.CV_8U, new Scalar(0));
     LineHandler lineHandler = new LineHandler();
     RectangleHandler rectangleHandler = new RectangleHandler();
