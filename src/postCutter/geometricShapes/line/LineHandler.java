@@ -212,9 +212,9 @@ public final class LineHandler {
      * @param length required length.
      */
     private void deleteShortLines(List<MyLine> lines, int length){
-        for(MyLine line : lines){
-            if(line.length() < length){
-                lines.remove(line);
+        for(int i = 0; i < lines.size(); i++){
+            if(lines.get(i).length() < length){
+                lines.remove(i);
             }
         }
     }
