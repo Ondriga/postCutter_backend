@@ -145,6 +145,8 @@ public class LineHandlerTests {
     public void removeNoise(){
         for(int i=0; i<=5; i++){
             mat1.put(i, 0, 255);
+            mat1.put(i, 6, 255);
+            mat1.put(i, 12, 255);
         }
         for(int i=0; i<=23; i++){
             mat1.put(i, 20, 255);
@@ -152,7 +154,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
 
-        assertEquals("List size test before remove noise", 2, lineHandler.getVerticalLines().size());
+        assertEquals("List size test before remove noise", 4, lineHandler.getVerticalLines().size());
         lineHandler.deleteNoise(50, 50);
         assertEquals("List size test after remove noise", 1, lineHandler.getVerticalLines().size());
     }

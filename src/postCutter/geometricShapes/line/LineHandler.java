@@ -214,7 +214,7 @@ public final class LineHandler {
     private void deleteShortLines(List<MyLine> lines, int length){
         for(int i = 0; i < lines.size(); i++){
             if(lines.get(i).length() < length){
-                lines.remove(i);
+                lines.remove(i--);
             }
         }
     }
