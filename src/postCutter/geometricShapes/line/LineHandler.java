@@ -29,6 +29,8 @@ public final class LineHandler {
     private static final int ALLOW_EMPTY_RANGE = 5;
     /// Constant for allow position threshold for pixel or line. 
     private static final int ALLOW_POSITION_MOVE = 2;
+    /// Constant for allow length of finding lines.
+    private static final int ALLOW_TEMPORARY_LENGTH = 50;
 
     /**
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
@@ -40,7 +42,7 @@ public final class LineHandler {
         Mat pictureClone = picture.clone();
 
         // horizontal lines
-        for(int j=0; j<cols; j++){
+        for(int j=0; j<cols; j += ALLOW_POSITION_MOVE + 1){
             for(int i=0; i<rows; i++){
                 if(picture.get(i, j)[0] > THRESHOLD_COLOR){
                     if(j+1<cols && picture.get(i, j+1)[0] > THRESHOLD_COLOR){
@@ -51,7 +53,7 @@ public final class LineHandler {
         }
 
         // vertical lines
-        for (int i=0; i<rows; i++){
+        for (int i=0; i<rows; i += ALLOW_POSITION_MOVE + 1){
             for (int j=0; j<cols; j++){
                 if(pictureClone.get(i, j)[0] > THRESHOLD_COLOR){
                     if(i+1< rows && pictureClone.get(i+1, j)[0] > THRESHOLD_COLOR){
@@ -116,7 +118,7 @@ public final class LineHandler {
             }
         }
         HorizontalLine line = HorizontalLine.createLine(start, end);
-        if(line != null && line.length() >= ALLOW_EMPTY_RANGE){
+        if(line != null && line.length() >= ALLOW_TEMPORARY_LENGTH){
             return line;
         }
         return null;
@@ -171,7 +173,7 @@ public final class LineHandler {
      * Method finding end of line.
      * @param start first coordinate of line.
      * @param picture where line is finding.
-     * @return null if line length is smaller than allowed empty range, otherwise new verticalLine object.
+     * @return null if line length is smaller than allowed temporary length, otherwise new verticalLine object.
      */
     private VerticalLine findVerticalLine(Coordinate start, Mat picture){
         int height = picture.rows();
@@ -190,7 +192,7 @@ public final class LineHandler {
             }
         }
         VerticalLine line = VerticalLine.createLine(start, end);
-        if(line != null && line.length() >= ALLOW_EMPTY_RANGE){
+        if(line != null && line.length() >= ALLOW_TEMPORARY_LENGTH){
             return line;
         }
         return null;
