@@ -15,6 +15,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.CvType;
 
 import postCutter.Cutter;
+import postCutter.geometricShapes.Coordinate;
 
 /**
  * Tests for Cutter class.
@@ -36,15 +37,13 @@ public class CutterTests {
      */
     @Test
     public void doCutTest(){
-        for(int i=20; i<=60; i++){
-            mat.put(20, i, 255, 255, 255);
-            mat.put(60, i, 255, 255, 255);
-            mat.put(i, 20, 255, 255, 255);
-            mat.put(i, 60, 255, 255, 255);
-        }
-
         cutter.loadPicture(mat);
+        Coordinate cornerA = new Coordinate(19, 19);
+        Coordinate cornerB = new Coordinate(61, 61);
+        cutter.getRectangle().setCornerA(cornerA);
+        cutter.getRectangle().setCornerB(cornerB);
         Mat picture = cutter.getCroppedImage();
+
         assertNotNull("Picture crop wasn`t successful" ,picture);
         assertEquals("Picture height isn`t correct.", 40, picture.rows());
         assertEquals("Picture width isn`t correct.", 40, picture.cols());

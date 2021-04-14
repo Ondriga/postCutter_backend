@@ -30,98 +30,111 @@ public final class LineHandler {
     /// Constant for allow position threshold for pixel or line. 
     private static final int ALLOW_POSITION_MOVE = 2;
     /// Constant for allow length of finding lines.
-    private static final int ALLOW_TEMPORARY_LENGTH = 50;
+    private static final int ALLOW_TEMPORARY_LENGTH = 10;
 
     /**
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
      * @param picture where the lines are finding. Picture must be in grayscale.
      */
     public void findLines(Mat picture){
-        int rows = picture.rows();
-        int cols = picture.cols();
-        Mat pictureClone = picture.clone();
+        int height = picture.rows();
+        int width = picture.cols();
 
         // horizontal lines
-        for(int j=0; j<cols; j += ALLOW_POSITION_MOVE + 1){
-            for(int i=0; i<rows; i++){
-                if(picture.get(i, j)[0] > THRESHOLD_COLOR){
-                    if(j+1<cols && picture.get(i, j+1)[0] > THRESHOLD_COLOR){
-                        addLine(findHorizontalLine(new Coordinate(j, i), picture), this.horizontalLines);
-                    }
-                }
-            }
+        for(int y=0; y<height; y++){
+            findLineInRow(y, picture);
         }
 
         // vertical lines
-        for (int i=0; i<rows; i += ALLOW_POSITION_MOVE + 1){
-            for (int j=0; j<cols; j++){
-                if(pictureClone.get(i, j)[0] > THRESHOLD_COLOR){
-                    if(i+1< rows && pictureClone.get(i+1, j)[0] > THRESHOLD_COLOR){
-                        addLine(findVerticalLine(new Coordinate(j, i), pictureClone), this.verticalLines);
-                    }
-                }
-            }
+        for (int x=0; x<width; x++){
+            findLineInColumn(x, picture);
         }
     }
 
     /**
-     * Check if x or y value is in picture.
-     * @param value x or y value.
-     * @param maxValue max x or y value of picture.
-     * @return true if value is in interval <0, maxValue>, otherwise false.
+     * Method finding lines in row.
+     * @param y value of row in picture.
+     * @param picture where lines are finding.
      */
-    private boolean isValueInPicture(int value, int maxValue){
-        return value >= 0 && value <= maxValue;
-    }
-
-    /**
-     * Provide check if next pixel in x way is also black. There are implemented check if black pixel isn`t moved in y way.
-     * @param x value of pixel.
-     * @param y value of pixel.
-     * @param picture where the line is finding.
-     * @return true if the pixel or pixel in near y neighborhood is black, otherwise false.
-     */
-    private boolean checkPixelYWay(int x, int y, Mat picture){
-        boolean found = false;
-        for(int i=-1 * ALLOW_POSITION_MOVE; i<=ALLOW_POSITION_MOVE; i++){
-            if(!isValueInPicture(y+i, picture.rows()-1)){
-                continue;
-            }
-            if(picture.get(y+i, x)[0] > THRESHOLD_COLOR){
-                picture.put(y+i, x, 0);
-                found = true;
-            }
-        }
-        return found;
-    }
-
-    /**
-     * Method finding end of line.
-     * @param start first coordinate of line.
-     * @param picture where line is finding.
-     * @return null if line length is smaller than allowed empty range, otherwise new horizontalLine object.
-     */
-    private HorizontalLine findHorizontalLine(Coordinate start, Mat picture){
+    private void findLineInRow(int y, Mat picture){
         int width = picture.cols();
-        int startX = start.getX();
-        int startY = start.getY();
-        Coordinate end = new Coordinate(startX, startY);
+        int startX = -1;
+        int endX = -1;
         int emptyRangeCounter = 0;
-        for(int x = startX; x < width; x++){
-            if(checkPixelYWay(x, startY, picture)){
-                end.setX(x);
+        for(int x = 0; x < width; x++){
+            if(picture.get(y, x)[0] > THRESHOLD_COLOR){
                 emptyRangeCounter = 0;
-            }else{
-                if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE){
-                    break;
+                if(startX < 0){
+                    startX = x;
+                }else{
+                    endX = x;
                 }
+            }else if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE && startX >= 0){
+                addHorizontalLine(startX, endX, y);
+                startX = -1;
+                endX = -1;
             }
         }
-        HorizontalLine line = HorizontalLine.createLine(start, end);
-        if(line != null && line.length() >= ALLOW_TEMPORARY_LENGTH){
-            return line;
+        if(startX >= 0 && endX >= 0){
+            addHorizontalLine(startX, endX, y);
         }
-        return null;
+    }
+
+    /**
+     * Create and add line into horizontalLines list if the line have enough length.
+     * @param startX x value where line start.
+     * @param endX x value where line end.
+     * @param y value of line.
+     */
+    private void addHorizontalLine(int startX, int endX, int y){
+        if(endX - startX + 1 >= ALLOW_TEMPORARY_LENGTH){
+            Coordinate start = new Coordinate(startX, y);
+            Coordinate end = new Coordinate(endX, y);
+            addLine(HorizontalLine.createLine(start, end), this.horizontalLines);
+        }
+    }
+
+    /**
+     * Method finding lines in column.
+     * @param x value of column in picture.
+     * @param picture where lines are finding.
+     */
+    private void findLineInColumn(int x, Mat picture){
+        int height = picture.rows();
+        int startY = -1;
+        int endY = -1;
+        int emptyRangeCounter = 0;
+        for(int y = 0; y < height; y++){
+            if(picture.get(y, x)[0] > THRESHOLD_COLOR){
+                emptyRangeCounter = 0;
+                if(startY < 0){
+                    startY = y;
+                }else{
+                    endY = y;
+                }
+            }else if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE && startY >= 0){
+                addVerticalLine(startY, endY, x);
+                startY = -1;
+                endY = -1;
+            }
+        }
+        if(startY >= 0 && endY >= 0){
+            addVerticalLine(startY, endY, x);
+        }
+    }
+
+    /**
+     * Create and add line into verticalLine list if the line have enough length.
+     * @param startY y value where line start.
+     * @param endY y value where line end.
+     * @param x value of line.
+     */
+    private void addVerticalLine(int startY, int endY, int x){
+        if(endY - startY + 1 >= ALLOW_TEMPORARY_LENGTH){
+            Coordinate start = new Coordinate(x, startY);
+            Coordinate end = new Coordinate(x, endY);
+            addLine(VerticalLine.createLine(start, end), this.verticalLines);
+        }
     }
 
     /**
@@ -146,56 +159,6 @@ public final class LineHandler {
             }
             lines.add(newLine);
         }
-    }
-
-    /**
-     * Provide check if next pixel in y way is also black. There are implemented check if black pixel isn`t moved in x way.
-     * @param x value of pixel.
-     * @param y value of pixel.
-     * @param picture where the line is finding.
-     * @return true if the pixel or pixel in near x neighborhood is black, otherwise false.
-     */
-    private boolean checkPixelXWay(int x, int y, Mat picture){
-        boolean found = false;
-        for(int i=-1 * ALLOW_POSITION_MOVE; i<=ALLOW_POSITION_MOVE; i++){
-            if(!isValueInPicture(x+i, picture.cols()-1)){
-                continue;
-            }
-            if(picture.get(y, x+i)[0] > THRESHOLD_COLOR){
-                picture.put(y, x+i, 0);
-                found = true;
-            }
-        }
-        return found;
-    }
-
-    /**
-     * Method finding end of line.
-     * @param start first coordinate of line.
-     * @param picture where line is finding.
-     * @return null if line length is smaller than allowed temporary length, otherwise new verticalLine object.
-     */
-    private VerticalLine findVerticalLine(Coordinate start, Mat picture){
-        int height = picture.rows();
-        int startX = start.getX();
-        int startY = start.getY();
-        Coordinate end = new Coordinate(startX, startY);
-        int emptyRangeCounter = 0;
-        for(int y = startY; y < height; y++){
-            if(checkPixelXWay(startX, y, picture)){
-                end.setY(y);
-                emptyRangeCounter = 0;
-            }else{
-                if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE){
-                    break;
-                }
-            }
-        }
-        VerticalLine line = VerticalLine.createLine(start, end);
-        if(line != null && line.length() >= ALLOW_TEMPORARY_LENGTH){
-            return line;
-        }
-        return null;
     }
 
     /**

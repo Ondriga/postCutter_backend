@@ -19,7 +19,7 @@ public class TestRunner {
       System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
       Result result = JUnitCore.runClasses(CoordinateTests.class);
-      int fails = printResult("COORDINATE TESTS", result);
+      int fails = printResult("Coordinate TESTS", result);
 
       result = JUnitCore.runClasses(MyLineTests.class);
       fails += printResult("MyLine TESTS", result);
