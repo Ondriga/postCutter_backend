@@ -88,4 +88,13 @@ public class MyRectangle {
     public int getHeight(){
         return cornerB.getY() - cornerA.getY() + 1;
     }
+
+    /**
+     * Return string representation of this rectangle. The format is 'corner A[x1, y1] corner B[x2, y2]',
+     * where A is coordinate of top left corner and B is coordinate of bottom right corner.
+     */
+    @Override
+    public String toString() {
+        return "corner A" + this.cornerA + " corner B" + this.cornerB;
+    }
 }

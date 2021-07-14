@@ -117,4 +117,13 @@ public abstract class MyLine {
         hash = hash * 42 + this.getEndPoint().hashCode();
         return hash;
     }
+
+    /**
+     * Return string representation of this line. The format is 'A[x1, y1] B[x2, y2]',
+     * where A is coordinate of start point and B is coordinate of end point.
+     */
+    @Override
+    public String toString() {
+        return "A" + this.startPoint + " B" + this.endPoint;
+    }
 }

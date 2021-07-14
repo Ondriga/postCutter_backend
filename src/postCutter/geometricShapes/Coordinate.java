@@ -84,4 +84,13 @@ public class Coordinate {
         hash = hash * 42 + this.getY();
         return hash;
     }
+
+    /**
+     * Return string representation of this coordinate. The format is '[x, y]',
+     * where x is x value and y is y value.
+     */
+    @Override
+    public String toString() {
+        return "[" + this.x + ", " + this.y + "]";
+    }
 }
