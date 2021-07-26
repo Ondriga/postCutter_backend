@@ -43,6 +43,10 @@ public class HorizontalLine extends MyLine implements Comparable<HorizontalLine>
                 this.setEndPoint(coordinate);
                 return true;
             }
+            if(this.getStartPoint().getX() <= coordinate.getX() &&
+            this.getEndPoint().getX() >= coordinate.getX()){
+                return true;
+            }
         }
         return false;
     }
