@@ -31,8 +31,6 @@ public final class LineHandler {
 
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
-    /// Constant for allow empty space size in line.
-    private static final int ALLOW_EMPTY_RANGE = 5;
     /// Constant for allow length of finding lines.
     private static final int ALLOW_TEMPORARY_LENGTH = 10;
 
