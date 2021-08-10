@@ -20,7 +20,7 @@ public abstract class MyLine {
     /// Constant for allow position threshold for pixel or line.
     protected static final int ALLOW_POSITION_MOVE = 2;
     /// Constant for allow empty space size in line.
-    protected static final int ALLOW_EMPTY_RANGE = 5;
+    protected static final int ALLOW_EMPTY_RANGE = 8;
 
     /**
      * Constructor.

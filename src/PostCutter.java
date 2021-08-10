@@ -10,10 +10,8 @@ import postCutter.edgeDetection.*;
 import postCutter.geometricShapes.line.*;
 import postCutter.geometricShapes.rectangle.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +28,6 @@ import javax.swing.WindowConstants;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -48,8 +45,9 @@ import java.awt.GridLayout;
  */
 public class PostCutter extends JFrame{
     ///Constant for directory name with testing screenshots
-    private static final String DIRECTORY = "screenshots/";
-    //private static final String DIRECTORY = "screenshots2/";
+    //private static final String DIRECTORY = "screenshots/";
+    private static final String DIRECTORY = "screenshots2/";
+    //private static final String DIRECTORY = "screenshots3/";
     ///
 
     /// Component for display origin picture
@@ -217,7 +215,7 @@ public class PostCutter extends JFrame{
                     Mat grayScale = new Mat();
                     Imgproc.cvtColor(picture, grayScale, Imgproc.COLOR_RGB2GRAY);
                     Mat pictureChange = edgeDetector.highlightEdge(grayScale);
-                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(pictureChange), labelChange.getSize()));
+                    labelChange.setIcon(getResizedIcon(EdgeDetector.mat2BufferedImage(pictureChange), labelChange.getSize()));
                     labelLines.setIcon(getResizedIcon(highlightLines(pictureChange), labelLines.getSize()));
                     break;
                 case 1:
@@ -226,9 +224,9 @@ public class PostCutter extends JFrame{
                     Mat canvasRectangle = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
                     printLines(canvasLines, cutter.getHorizontalLines());
                     printLines(canvasLines, cutter.getVerticalLines());
-                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasLines), labelChange.getSize()));
+                    labelChange.setIcon(getResizedIcon(EdgeDetector.mat2BufferedImage(canvasLines), labelChange.getSize()));
                     printRectangle(canvasRectangle, cutter.getRectangle());
-                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(canvasRectangle), labelLines.getSize()));
+                    labelLines.setIcon(getResizedIcon(EdgeDetector.mat2BufferedImage(canvasRectangle), labelLines.getSize()));
                     break;
                 default:
                     cutter.loadPicture(picture.clone());
@@ -236,8 +234,8 @@ public class PostCutter extends JFrame{
                     printLines(canvas, cutter.getHorizontalLines());
                     printLines(canvas, cutter.getVerticalLines());
                     printRectangle(canvas, cutter.getRectangle());
-                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvas), labelChange.getMaximumSize()));
-                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(cutter.getCroppedImage()), labelLines.getSize()));
+                    labelChange.setIcon(getResizedIcon(EdgeDetector.mat2BufferedImage(canvas), labelChange.getMaximumSize()));
+                    labelLines.setIcon(getResizedIcon(EdgeDetector.mat2BufferedImage(cutter.getCroppedImage()), labelLines.getSize()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -299,7 +297,7 @@ public class PostCutter extends JFrame{
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), picture.cols()-1, picture.rows());
         printRectangle(canvas, rectangleHandler.getRectangle());
 
-        return mat2BufferedImage(canvas);
+        return EdgeDetector.mat2BufferedImage(canvas);
     }
 
     /**
@@ -339,27 +337,4 @@ public class PostCutter extends JFrame{
         return dimension;
     }
 
-    /**
-     * Convert "Mat" into "BufferedImage"
-     * Taken from https://www.tutorialspoint.com/how-to-convert-opencv-mat-object-to-bufferedimage-object-using-java
-     * @author Krishna Kasyap
-     * @param mat picture stored like matrix
-     * @return picture stored like BufferedImage
-     */
-    public static BufferedImage mat2BufferedImage(Mat mat){
-        //Encoding the image
-        MatOfByte matOfByte = new MatOfByte();
-        Imgcodecs.imencode(".jpg", mat, matOfByte);
-        //Storing the encoded Mat in a byte array
-        byte[] byteArray = matOfByte.toArray();
-        //Preparing the Buffered Image
-        InputStream in = new ByteArrayInputStream(byteArray);
-        BufferedImage bufImage = null;
-        try {
-            bufImage = ImageIO.read(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bufImage;
-    }
 }

@@ -7,14 +7,15 @@
 
 package postCutter.geometricShapes.line;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.sound.sampled.LineEvent;
-
 import org.opencv.core.Mat;
 
+import postCutter.edgeDetection.EdgeDetector;
 import postCutter.geometricShapes.Coordinate;
 
 /**
@@ -33,7 +34,7 @@ public final class LineHandler {
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
     /// Constant for allow length of finding lines.
-    private static final int ALLOW_TEMPORARY_LENGTH = 10;
+    private static final int ALLOW_TEMPORARY_LENGTH = 5;
 
     /**
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
@@ -42,13 +43,14 @@ public final class LineHandler {
     public void findLines(Mat picture){
 
         long nowTime  = System.nanoTime();//TODO profiling
+        
+        BufferedImage image = EdgeDetector.mat2BufferedImage(picture);
 
-        int height = picture.rows();
-        int width = picture.cols();
-
-        for(int y=0; y<height; y++){
-            for(int x=0; x<width; x++){
-                if(picture.get(y, x)[0] > THRESHOLD_COLOR){
+        for(int y=0; y<image.getHeight(); y++){
+            for(int x=0; x<image.getWidth(); x++){
+                int pixel = image.getRGB(x, y);
+                Color color = new Color(pixel, true);
+                if(color.getRed() > THRESHOLD_COLOR){
                     Coordinate coordinate = new Coordinate(x, y);
                     addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));
                     addDot(x, this.verticalMap, VerticalLine.createLine(coordinate, coordinate));
@@ -93,7 +95,7 @@ public final class LineHandler {
         }
         boolean extendFlag = false;
         for (MyLine myLine : lineList) {
-            if(myLine.extendByOne(newLine.getStartPoint())){
+            if(myLine.extendByLine(newLine) == 0){
                 extendFlag = true;
             }
         }
