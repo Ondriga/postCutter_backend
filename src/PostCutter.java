@@ -47,8 +47,11 @@ import java.awt.GridLayout;
  * Create gui and show everything to the user
  */
 public class PostCutter extends JFrame{
+    ///Constant for directory name with testing screenshots
     private static final String DIRECTORY = "screenshots/";
     //private static final String DIRECTORY = "screenshots2/";
+    ///
+
     /// Component for display origin picture
     private JLabel labelOrigin = new JLabel();
     /// Component for display changed picture

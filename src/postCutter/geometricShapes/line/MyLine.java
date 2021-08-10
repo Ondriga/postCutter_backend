@@ -72,8 +72,8 @@ public abstract class MyLine {
 
     /**
      * Try extend line by one dot.
-     * @param coordinate of new end of line.
-     * @return true if extend was successful, otherwise false.
+     * @param coordinate position of dot.
+     * @return true if extend was successful or dot is on line, otherwise false.
      */
     public abstract boolean extendByOne(Coordinate coordinate);
 

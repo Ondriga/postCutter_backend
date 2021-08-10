@@ -25,8 +25,9 @@ public final class LineHandler {
     private List<MyLine> verticalLines = new ArrayList<>();
     /// List of horizontal lines found in picture.
     private List<MyLine> horizontalLines = new ArrayList<>();
-
+    /// Map for temporary storing horizontal lines. 
     HashMap<Integer, List<MyLine>> horizontalMap = new HashMap<>();
+    /// Map for temporary storing vertical lines.
     HashMap<Integer, List<MyLine>> verticalMap = new HashMap<>();
 
     /// Constant for color limit to by count as black.
@@ -77,6 +78,13 @@ public final class LineHandler {
 
     }
 
+    /**
+     * Extend lines in map by black dot. The key in map is position in row if it is dot for vertical lines
+     * and column if it is for horizontal lines.
+     * @param key position in row for vertical lines or column for horizontal lines
+     * @param lineMap horizontal or vertical map with lines.
+     * @param newLine vertical or horizontal line representing black dot. 
+     */
     private void addDot(int key, HashMap<Integer, List<MyLine>> lineMap, MyLine newLine){
         List<MyLine> lineList = lineMap.get(key);
         if(lineList == null){
@@ -168,7 +176,7 @@ public final class LineHandler {
     }
 
     /**
-     * This method clear horizontal and vertical lists of lines.
+     * This method clear horizontal and vertical lists and maps of lines.
      */
     public void clear(){
         this.horizontalLines.clear();
