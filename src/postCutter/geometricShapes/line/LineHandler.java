@@ -44,13 +44,9 @@ public final class LineHandler {
 
         long nowTime  = System.nanoTime();//TODO profiling
         
-        BufferedImage image = EdgeDetector.mat2BufferedImage(picture);
-
-        for(int y=0; y<image.getHeight(); y++){
-            for(int x=0; x<image.getWidth(); x++){
-                int pixel = image.getRGB(x, y);
-                Color color = new Color(pixel, true);
-                if(color.getRed() > THRESHOLD_COLOR){
+        for(int y=0; y<picture.rows(); y++){
+            for(int x=0; x<picture.cols(); x++){
+                if(picture.get(y, x)[0] >THRESHOLD_COLOR){
                     Coordinate coordinate = new Coordinate(x, y);
                     addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));
                     addDot(x, this.verticalMap, VerticalLine.createLine(coordinate, coordinate));
