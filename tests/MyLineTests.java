@@ -147,7 +147,7 @@ public class MyLineTests {
     @Test
     public void extendLineByLineTestForHorizontal(){
         MyLine horizontal1 = HorizontalLine.createLine(coor12, coor13);
-        MyLine horizontal2 = HorizontalLine.createLine(coor14, coor15);
+        MyLine horizontal2 = HorizontalLine.createLine(new Coordinate(20, -5), new Coordinate(40, -5));
         MyLine horizontal3 = HorizontalLine.createLine(coor4, coor16);
         MyLine horizontal4 = HorizontalLine.createLine(coor17, coor18);
 
