@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="PostCutter" basedir="." default="rebuild-run">
 
-        <property name="src.dir"     value="src"/>
-        <property name="lib.dir"     value="lib/opencv-opencv-baf07c8/build/bin"/>
-        <property name="build.dir"   value="build"/>
-        <property name="classes.dir" value="${build.dir}/classes"/>
-        <property name="jar.dir"     value="${build.dir}/jar"/>
-        <property name="tests.dir"   value="tests"/>
-        <property name="main-class"  value="${ant.project.name}"/>
+        <property name="src.dir"        value="src"/>
+        <property name="lib.dir"        value="lib/opencv-opencv-baf07c8/build/bin"/>
+        <property name="build.dir"      value="build"/>
+        <property name="classes.dir"    value="${build.dir}/classes"/>
+        <property name="jar.dir"        value="${build.dir}/jar"/>
+        <property name="tests.dir"      value="tests"/>
+        <property name="profiler.dir"   value="profiling"/>
+        <property name="main-class"     value="${ant.project.name}"/>
 
         <path id="classpath">
             <path location="lib">
@@ -66,6 +67,16 @@
                     <attribute name="Main-Class" value="${main-class}"/>
                 </manifest>
             </jar>
+        </target>
+
+        <target name="compileProfiler" depends="clean,compile">
+            <javac classpathref="classpath" includeantruntime="true" srcdir="${profiler.dir}" destdir="${classes.dir}"/>
+        </target>
+
+        <target name="profiling" depends="compileProfiler">
+            <java classpathref="classpath" classname="Profiler" fork="true" classpath="${classes.dir}">
+                <sysproperty key="java.library.path" path="lib/opencv-opencv-baf07c8/build/lib"/>
+            </java>
         </target>
 
         <target name="rebuild" depends="clean,jar"/>
