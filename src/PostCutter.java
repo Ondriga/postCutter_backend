@@ -47,6 +47,12 @@ import java.awt.GridLayout;
  * Create gui and show everything to the user
  */
 public class PostCutter extends JFrame{
+    ///Constant for directory name with testing screenshots
+    //private static final String DIRECTORY = "screenshots/";
+    private static final String DIRECTORY = "screenshots2/";
+    //private static final String DIRECTORY = "screenshots3/";
+    ///
+
     /// Component for display origin picture
     private JLabel labelOrigin = new JLabel();
     /// Component for display changed picture
@@ -79,7 +85,7 @@ public class PostCutter extends JFrame{
     }
     
     public static void main(String[] args){
-        File f = new File("screenshots");
+        File f = new File(DIRECTORY);
         pathNames = f.list();
         if(pathNames.length == 0){
             System.err.println("NO FILES");
@@ -200,7 +206,7 @@ public class PostCutter extends JFrame{
         }else if(fileIndex > pathNames.length - 1){
             fileIndex = 0;
         }
-        String path = "screenshots/" + pathNames[fileIndex];
+        String path = DIRECTORY + pathNames[fileIndex];
         BufferedImage img = null;
         try {      
             img = ImageIO.read(new File(path));
@@ -357,4 +363,5 @@ public class PostCutter extends JFrame{
         }
         return bufImage;
     }
+
 }

@@ -79,7 +79,7 @@ public class LineHandlerTests {
      * Test for find horizontal and horizontal lines at the same time. 
      */
     @Test
-    public void veticalHorizontalLinesTest(){
+    public void verticalHorizontalLinesTest(){
         mat1.put(0, 2, 255);
         mat1.put(1, 2, 255);
         mat1.put(1, 4, 255);
@@ -100,11 +100,13 @@ public class LineHandlerTests {
         assertEquals("Horizontal list size test", 1, listHorizontal.size());
         assertEquals("Vertical list size test", 1, listVertical.size());
         
-        assertTrue("Start point of horizontal line wasn`t [0, 2]", listHorizontal.get(0).getStartPoint().equals(new Coordinate(0, 2)));
-        assertTrue("End point of horizontal line wasn`t [20, 2]", listHorizontal.get(0).getEndPoint().equals(new Coordinate(20, 2)));
+        MyLine line = listHorizontal.get(0);
+        assertTrue("Start point of horizontal line wasn`t [0, 2] but " + line.getStartPoint(), line.getStartPoint().equals(new Coordinate(0, 2)));
+        assertTrue("End point of horizontal line wasn`t [20, 2] but " + line.getEndPoint(), line.getEndPoint().equals(new Coordinate(20, 2)));
 
-        assertTrue("Start point of vertical line wasn`t [2, 0]", listVertical.get(0).getStartPoint().equals(new Coordinate(2, 0)));
-        assertTrue("End point of vertical line wasn`t [2, 20]", listVertical.get(0).getEndPoint().equals(new Coordinate(2, 20)));
+        line = listVertical.get(0);
+        assertTrue("Start point of vertical line wasn`t [2, 0] but " + line.getStartPoint(), line.getStartPoint().equals(new Coordinate(2, 0)));
+        assertTrue("End point of vertical line wasn`t [2, 20] but " + line.getEndPoint(), line.getEndPoint().equals(new Coordinate(2, 20)));
     }
 
     /**

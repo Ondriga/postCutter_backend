@@ -43,6 +43,10 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
                 this.setEndPoint(coordinate);
                 return true;
             }
+            if(this.getStartPoint().getY() <= coordinate.getY() &&
+            this.getEndPoint().getY() >= coordinate.getY()){
+                return true;
+            }
         }
         return false;
     }

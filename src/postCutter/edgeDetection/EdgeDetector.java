@@ -8,6 +8,15 @@
 package postCutter.edgeDetection;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
 
 /**
  * Representing interface for all edge detection class.
@@ -39,4 +48,5 @@ public abstract class EdgeDetector{
     public String getMethodName(){
         return this.methodName;
     }
+
 }

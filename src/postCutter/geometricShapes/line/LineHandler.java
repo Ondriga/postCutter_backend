@@ -7,11 +7,15 @@
 
 package postCutter.geometricShapes.line;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.opencv.core.Mat;
 
+import postCutter.edgeDetection.EdgeDetector;
 import postCutter.geometricShapes.Coordinate;
 
 /**
@@ -22,118 +26,70 @@ public final class LineHandler {
     private List<MyLine> verticalLines = new ArrayList<>();
     /// List of horizontal lines found in picture.
     private List<MyLine> horizontalLines = new ArrayList<>();
+    /// Map for temporary storing horizontal lines. 
+    HashMap<Integer, List<MyLine>> horizontalMap = new HashMap<>();
+    /// Map for temporary storing vertical lines.
+    HashMap<Integer, List<MyLine>> verticalMap = new HashMap<>();
 
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
-    /// Constant for allow empty space size in line.
-    private static final int ALLOW_EMPTY_RANGE = 5;
-    /// Constant for allow position threshold for pixel or line. 
-    private static final int ALLOW_POSITION_MOVE = 2;
     /// Constant for allow length of finding lines.
-    private static final int ALLOW_TEMPORARY_LENGTH = 10;
+    private static final int ALLOW_TEMPORARY_LENGTH = 5;
 
     /**
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
      * @param picture where the lines are finding. Picture must be in grayscale.
      */
     public void findLines(Mat picture){
-        int height = picture.rows();
-        int width = picture.cols();
-
-        // horizontal lines
-        for(int y=0; y<height; y++){
-            findLineInRow(y, picture);
-        }
-
-        // vertical lines
-        for (int x=0; x<width; x++){
-            findLineInColumn(x, picture);
-        }
-    }
-
-    /**
-     * Method finding lines in row.
-     * @param y value of row in picture.
-     * @param picture where lines are finding.
-     */
-    private void findLineInRow(int y, Mat picture){
-        int width = picture.cols();
-        int startX = -1;
-        int endX = -1;
-        int emptyRangeCounter = 0;
-        for(int x = 0; x < width; x++){
-            if(picture.get(y, x)[0] > THRESHOLD_COLOR){
-                emptyRangeCounter = 0;
-                if(startX < 0){
-                    startX = x;
-                }else{
-                    endX = x;
+        for(int y=0; y<picture.rows(); y++){
+            for(int x=0; x<picture.cols(); x++){
+                if(picture.get(y, x)[0] >THRESHOLD_COLOR){
+                    Coordinate coordinate = new Coordinate(x, y);
+                    addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));
+                    addDot(x, this.verticalMap, VerticalLine.createLine(coordinate, coordinate));
                 }
-            }else if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE && startX >= 0){
-                addHorizontalLine(startX, endX, y);
-                startX = -1;
-                endX = -1;
             }
         }
-        if(startX >= 0 && endX >= 0){
-            addHorizontalLine(startX, endX, y);
-        }
-    }
 
-    /**
-     * Create and add line into horizontalLines list if the line have enough length.
-     * @param startX x value where line start.
-     * @param endX x value where line end.
-     * @param y value of line.
-     */
-    private void addHorizontalLine(int startX, int endX, int y){
-        if(endX - startX + 1 >= ALLOW_TEMPORARY_LENGTH){
-            Coordinate start = new Coordinate(startX, y);
-            Coordinate end = new Coordinate(endX, y);
-            addLine(HorizontalLine.createLine(start, end), this.horizontalLines);
-        }
-    }
-
-    /**
-     * Method finding lines in column.
-     * @param x value of column in picture.
-     * @param picture where lines are finding.
-     */
-    private void findLineInColumn(int x, Mat picture){
-        int height = picture.rows();
-        int startY = -1;
-        int endY = -1;
-        int emptyRangeCounter = 0;
-        for(int y = 0; y < height; y++){
-            if(picture.get(y, x)[0] > THRESHOLD_COLOR){
-                emptyRangeCounter = 0;
-                if(startY < 0){
-                    startY = y;
-                }else{
-                    endY = y;
+        for(List<MyLine> lines : this.horizontalMap.values()){
+            for(MyLine line : lines){
+                if(line.length() >= ALLOW_TEMPORARY_LENGTH){
+                    addLine(line, this.horizontalLines);
                 }
-            }else if(++emptyRangeCounter >= ALLOW_EMPTY_RANGE && startY >= 0){
-                addVerticalLine(startY, endY, x);
-                startY = -1;
-                endY = -1;
             }
         }
-        if(startY >= 0 && endY >= 0){
-            addVerticalLine(startY, endY, x);
+        for(List<MyLine> lines : this.verticalMap.values()){
+            for(MyLine line : lines){
+                if(line.length() >= ALLOW_TEMPORARY_LENGTH){
+                    addLine(line, this.verticalLines);
+                }
+            }
         }
+        this.horizontalMap.clear();
+        this.verticalMap.clear();
     }
 
     /**
-     * Create and add line into verticalLine list if the line have enough length.
-     * @param startY y value where line start.
-     * @param endY y value where line end.
-     * @param x value of line.
+     * Extend lines in map by black dot. The key in map is position in row if it is dot for vertical lines
+     * and column if it is for horizontal lines.
+     * @param key position in row for vertical lines or column for horizontal lines
+     * @param lineMap horizontal or vertical map with lines.
+     * @param newLine vertical or horizontal line representing black dot. 
      */
-    private void addVerticalLine(int startY, int endY, int x){
-        if(endY - startY + 1 >= ALLOW_TEMPORARY_LENGTH){
-            Coordinate start = new Coordinate(x, startY);
-            Coordinate end = new Coordinate(x, endY);
-            addLine(VerticalLine.createLine(start, end), this.verticalLines);
+    private void addDot(int key, HashMap<Integer, List<MyLine>> lineMap, MyLine newLine){
+        List<MyLine> lineList = lineMap.get(key);
+        if(lineList == null){
+            lineList = new ArrayList<>();
+            lineMap.put(key, lineList);
+        }
+        boolean extendFlag = false;
+        for (MyLine myLine : lineList) {
+            if(myLine.extendByLine(newLine) == 0){
+                extendFlag = true;
+            }
+        }
+        if(!extendFlag){
+            lineList.add(newLine);
         }
     }
 
@@ -201,10 +157,12 @@ public final class LineHandler {
     }
 
     /**
-     * This method clear horizontal and vertical lists of lines.
+     * This method clear horizontal and vertical lists and maps of lines.
      */
     public void clear(){
         this.horizontalLines.clear();
         this.verticalLines.clear();
+        this.horizontalMap.clear();
+        this.verticalMap.clear();
     }
 }

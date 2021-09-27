@@ -58,27 +58,13 @@ public class Cutter {
      */
     private void findCut(){
         if(this.picture != null){
-            long startTime = System.nanoTime();//TODO debug
-
             Mat grayScale = new Mat();
             Imgproc.cvtColor(this.picture, grayScale, Imgproc.COLOR_RGB2GRAY);
             for(EdgeDetector edgeMethod : edgeMethods){
                 lineHandler.findLines(edgeMethod.highlightEdge(grayScale));
             }
-            System.out.println("----------------------------------------------------------");//TODO debug
-            System.out.println("Pocet ciar pred odstraneni kratkych ciar.");//TODO debug
-            System.out.println("Horizontalne ciary ["+lineHandler.getHorizontalLines().size()+"]");//TODO debug
-            System.out.println("Vertikalne ciary ["+lineHandler.getVerticalLines().size()+"]");//TODO debug
-            System.out.println("Pocet ciar po odstraneni kratkych ciar.");//TODO debug
             lineHandler.deleteNoise(grayScale.cols(), grayScale.rows());
-            System.out.println("Horizontalne ciary ["+lineHandler.getHorizontalLines().size()+"]");//TODO debug
-            System.out.println("Vertikalne ciary ["+lineHandler.getVerticalLines().size()+"]");//TODO debug
             rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());
-
-            long endTime   = System.nanoTime();//TODO debug
-            double totalTime = (endTime - startTime) / 1000000000.0;//TODO debug
-            System.out.println("Cas potrebny na vykonanie orezu: " + totalTime+" sekund");//TODO debug
-            System.out.println("");//TODO debug
         }
     }
 

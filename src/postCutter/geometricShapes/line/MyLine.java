@@ -18,9 +18,9 @@ public abstract class MyLine {
     /// Second coordinate of line.
     private Coordinate endPoint;
     /// Constant for allow position threshold for pixel or line.
-    protected static final int ALLOW_POSITION_MOVE = 2;
+    protected static final int ALLOW_POSITION_MOVE = 4;
     /// Constant for allow empty space size in line.
-    protected static final int ALLOW_EMPTY_RANGE = 5;
+    protected static final int ALLOW_EMPTY_RANGE = 10;
 
     /**
      * Constructor.
@@ -72,8 +72,8 @@ public abstract class MyLine {
 
     /**
      * Try extend line by one dot.
-     * @param coordinate of new end of line.
-     * @return true if extend was successful, otherwise false.
+     * @param coordinate position of dot.
+     * @return true if extend was successful or dot is on line, otherwise false.
      */
     public abstract boolean extendByOne(Coordinate coordinate);
 
