@@ -41,9 +41,6 @@ public final class LineHandler {
      * @param picture where the lines are finding. Picture must be in grayscale.
      */
     public void findLines(Mat picture){
-
-        long nowTime  = System.nanoTime();//TODO profiling
-        
         for(int y=0; y<picture.rows(); y++){
             for(int x=0; x<picture.cols(); x++){
                 if(picture.get(y, x)[0] >THRESHOLD_COLOR){
@@ -70,10 +67,6 @@ public final class LineHandler {
         }
         this.horizontalMap.clear();
         this.verticalMap.clear();
-
-        double celkovyCas = (System.nanoTime() - nowTime) / 1000000000.0;//TODO profiling
-        System.out.printf("NAJDENIE CIAR: %.4f sekund\n", celkovyCas);//TODO profiling
-
     }
 
     /**
@@ -130,18 +123,8 @@ public final class LineHandler {
      * @param height of picture.
      */
     public void deleteNoise(int width, int height){
-        System.out.println("----------------------------------------------------------");//TODO profiling
-        System.out.println("Pocet ciar pred odstraneni kratkych ciar.");//TODO profiling
-        System.out.println("Horizontalne ciary ["+horizontalLines.size()+"]");//TODO profiling
-        System.out.println("Vertikalne ciary ["+verticalLines.size()+"]");//TODO profiling
-        System.out.println("Pocet ciar po odstraneni kratkych ciar.");//TODO profiling
-
         deleteShortLines(this.horizontalLines, width/3);
         deleteShortLines(this.verticalLines, height/5);
-
-        System.out.println("Horizontalne ciary ["+horizontalLines.size()+"]");//TODO profiling
-        System.out.println("Vertikalne ciary ["+verticalLines.size()+"]");//TODO profiling
-        System.out.println("----------------------------------------------------------");//TODO profiling
     }
 
     /**

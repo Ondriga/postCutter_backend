@@ -58,8 +58,6 @@ public class Cutter {
      */
     private void findCut(){
         if(this.picture != null){
-            long startTime = System.nanoTime();//TODO profiling
-
             Mat grayScale = new Mat();
             Imgproc.cvtColor(this.picture, grayScale, Imgproc.COLOR_RGB2GRAY);
             for(EdgeDetector edgeMethod : edgeMethods){
@@ -67,11 +65,6 @@ public class Cutter {
             }
             lineHandler.deleteNoise(grayScale.cols(), grayScale.rows());
             rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());
-
-            long endTime   = System.nanoTime();//TODO profiling
-            double totalTime = (endTime - startTime) / 1000000000.0;//TODO profiling
-            System.out.printf("Cas potrebny na vykonanie orezu: %.4f sekund\n", totalTime);//TODO profiling
-            System.out.println("");//TODO profiling
         }
     }
 
