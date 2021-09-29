@@ -27,20 +27,27 @@ public class Profiler {
     }
 
     public static void main(String[] args) {
-        Cutter cutter = new Cutter();
-
         File f = new File(DIRECTORY);
         if(f.list().length == 0){   //If directory is empty.
             System.err.println("NO FILES");
             System.exit(1);
         }
-        System.out.println("Press any key to start.");
-        Scanner scanner = new Scanner(System.in);
-        scanner.next(); //Wait for user input for start with image processing.  
-        for(String filePath : f.list()){
-            Mat picture = Imgcodecs.imread(DIRECTORY + filePath);
+        System.out.println("Press ENTER to start.");
+        try {
+            System.in.read();   //Wait for user input for start with image processing.
+        }  
+        catch(Exception e){}
+        profiling(f.list());
+        System.out.println("Profiling finished.");
+    }
+
+    private static void profiling(String[] files){
+        Cutter cutter = new Cutter();
+        int counter = 0;
+        for(String file : files){
+            System.out.println(++counter + "/" + files.length);
+            Mat picture = Imgcodecs.imread(DIRECTORY + file);
             cutter.loadPicture(picture);
         }
-        System.out.println("Profiling finished.");
     }
 }
