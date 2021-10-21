@@ -35,18 +35,16 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     
     @Override
     public boolean extendByOne(Coordinate coordinate) {
-        if(this.getStartPoint().getX() == coordinate.getX()){
-            if(this.getStartPoint().getY()-1 == coordinate.getY()){
+        if(this.getStartPoint().getX() != coordinate.getX()){
+            return false;
+        }
+        if(this.getStartPoint().getY()-ALLOW_EMPTY_RANGE < coordinate.getY() && this.getEndPoint().getY()+ALLOW_EMPTY_RANGE > coordinate.getY()){
+            if(this.getStartPoint().getY() > coordinate.getY()){
                 this.setStartPoint(coordinate);
-                return true;
-            }else if(this.getEndPoint().getY()+1 == coordinate.getY()){
+            }else if(this.getEndPoint().getY() < coordinate.getY()){
                 this.setEndPoint(coordinate);
-                return true;
             }
-            if(this.getStartPoint().getY() <= coordinate.getY() &&
-            this.getEndPoint().getY() >= coordinate.getY()){
-                return true;
-            }
+            return true;
         }
         return false;
     }
@@ -59,21 +57,6 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     @Override
     public int compareTo(VerticalLine o) {
         return this.getStartPoint().getX() - o.getStartPoint().getX();
-    }
-
-    /**
-     * Get information, if the line have same x value as this object. For compare is used allowed variation.
-     * @param line for compare.
-     * @return 0 if the x value of line is like x value of this object. -1 if x value is lower. 1 if x value is bigger.
-     */
-    private int checkWidth(MyLine line){
-        if(this.getStartPoint().getX() - ALLOW_POSITION_MOVE <= line.getStartPoint().getX()){
-            if(this.getStartPoint().getX() + ALLOW_POSITION_MOVE >= line.getStartPoint().getX()){
-                return 0;
-            }
-            return -1;
-        }
-        return 1;
     }
 
     /**
@@ -95,23 +78,19 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     }
 
     @Override
-    public int extendByLine(MyLine line) {
-        int positionFlag = checkWidth(line);
-        if(positionFlag == 0){
-            if(lineCover(this, line) || lineCover(line, this)){
-                int x = this.getStartPoint().getX();
-                if(line.length() > this.length()){  //X value select based on length.
-                    x = line.getStartPoint().getX();
-                }
-                int y = Math.min(line.getStartPoint().getY(), this.getStartPoint().getY());
-                this.setStartPoint(new Coordinate(x, y));
-                y = Math.max(line.getEndPoint().getY(), this.getEndPoint().getY());
-                this.setEndPoint(new Coordinate(x, y));
-            }else{
-                return -1;
+    public boolean extendByLine(MyLine line) {
+        if(lineCover(this, line) || lineCover(line, this)){
+            int x = this.getStartPoint().getX();
+            if(line.length() > this.length()){  //X value select based on length.
+                x = line.getStartPoint().getX();
             }
+            int y = Math.min(line.getStartPoint().getY(), this.getStartPoint().getY());
+            this.setStartPoint(new Coordinate(x, y));
+            y = Math.max(line.getEndPoint().getY(), this.getEndPoint().getY());
+            this.setEndPoint(new Coordinate(x, y));
+            return true;
         }
-        return positionFlag;
+        return false;
     }
 
     /**
@@ -128,5 +107,15 @@ public class VerticalLine extends MyLine implements Comparable<VerticalLine> {
     public boolean isSimilar(MyLine line) {
         return isYCorrect(this.getStartPoint().getY(), line.getStartPoint().getY()) &&
         isYCorrect(this.getEndPoint().getY(), line.getEndPoint().getY());
+    }
+
+    @Override
+    public int getLevel() {
+        return this.getStartPoint().getX();
+    }
+
+    @Override
+    public boolean isBefore(MyLine line) {
+        return this.getStartPoint().getY() < line.getStartPoint().getY();
     }
 }

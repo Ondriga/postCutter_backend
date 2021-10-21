@@ -47,11 +47,11 @@ import java.awt.GridLayout;
  * Create gui and show everything to the user
  */
 public class PostCutter extends JFrame{
-    ///Constant for directory name with testing screenshots
-    //private static final String DIRECTORY = "screenshots/";
-    private static final String DIRECTORY = "screenshots2/";
+    ///Constants for directory name with testing screenshots
+    private static final String DIRECTORY = "screenshots/";
+    //private static final String DIRECTORY = "screenshots2/";
     //private static final String DIRECTORY = "screenshots3/";
-    ///
+    
 
     /// Component for display origin picture
     private JLabel labelOrigin = new JLabel();
@@ -292,7 +292,7 @@ public class PostCutter extends JFrame{
         
         LineHandler lineHandler = new LineHandler();
         lineHandler.findLines(picture);
-        lineHandler.deleteNoise(picture.cols(), picture.rows());
+        lineHandler.storeLinesAndDeleteNoise(picture.cols(), picture.rows());
         printLines(canvas, lineHandler.getHorizontalLines());
         printLines(canvas, lineHandler.getVerticalLines());
 

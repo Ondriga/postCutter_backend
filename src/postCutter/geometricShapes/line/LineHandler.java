@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.opencv.core.Mat;
 
@@ -27,14 +28,12 @@ public final class LineHandler {
     /// List of horizontal lines found in picture.
     private List<MyLine> horizontalLines = new ArrayList<>();
     /// Map for temporary storing horizontal lines. 
-    HashMap<Integer, List<MyLine>> horizontalMap = new HashMap<>();
+    private HashMap<Integer, List<MyLine>> horizontalMap = new HashMap<>();
     /// Map for temporary storing vertical lines.
-    HashMap<Integer, List<MyLine>> verticalMap = new HashMap<>();
+    private HashMap<Integer, List<MyLine>> verticalMap = new HashMap<>();
 
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
-    /// Constant for allow length of finding lines.
-    private static final int ALLOW_TEMPORARY_LENGTH = 5;
 
     /**
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
@@ -50,23 +49,6 @@ public final class LineHandler {
                 }
             }
         }
-
-        for(List<MyLine> lines : this.horizontalMap.values()){
-            for(MyLine line : lines){
-                if(line.length() >= ALLOW_TEMPORARY_LENGTH){
-                    addLine(line, this.horizontalLines);
-                }
-            }
-        }
-        for(List<MyLine> lines : this.verticalMap.values()){
-            for(MyLine line : lines){
-                if(line.length() >= ALLOW_TEMPORARY_LENGTH){
-                    addLine(line, this.verticalLines);
-                }
-            }
-        }
-        this.horizontalMap.clear();
-        this.verticalMap.clear();
     }
 
     /**
@@ -82,47 +64,43 @@ public final class LineHandler {
             lineList = new ArrayList<>();
             lineMap.put(key, lineList);
         }
-        boolean extendFlag = false;
-        for (MyLine myLine : lineList) {
-            if(myLine.extendByLine(newLine) == 0){
-                extendFlag = true;
+        for(int i=0; i<lineList.size(); i++){
+            if(lineList.get(i).extendByOne(newLine.getStartPoint())){
+                return;
+            }
+            if(newLine.isBefore(lineList.get(i))){
+                lineList.add(i, newLine);
+                return;
             }
         }
-        if(!extendFlag){
-            lineList.add(newLine);
-        }
+        lineList.add(newLine);
     }
 
     /**
-     * Add line into list of lines or merge with one of line in this list.
-     * @param newLine new line, which is supposed to be add to list of lines.
-     * @param lines list of lines.
+     * Iterate via all lists at all levels. Take 2 rows/columns and merge lines in this levels. higher level store
+     * to finalLines list and lower level return to the linesMap at correct level.
+     * @param linesMap map of all lines with key, which represent lines level.
+     * @param finalLines list of merged lines for later use.
      */
-    private void addLine(MyLine newLine, List<MyLine> lines){
-        if(newLine != null){
-            for(int i=0; i<lines.size(); i++){
-                switch(lines.get(i).extendByLine(newLine)){
-                    case -1:
-                        break;
-                    case 0:
-                        newLine = lines.get(i);
-                        lines.remove(i--);
-                        break;
-                    default:
-                        lines.add(i, newLine);
-                        return;
-                }
+    private void addLines(HashMap<Integer, List<MyLine>> linesMap, List<MyLine> finalLines){
+        for(int key : linesMap.keySet()){
+            LineMerger lineMerger = new LineMerger(linesMap.get(key), linesMap.get(key + 1), finalLines, key);
+            List<MyLine> lines = lineMerger.mergeLinesAndStore();
+            if(!lines.isEmpty()){
+                linesMap.put(key + 1, lines);
             }
-            lines.add(newLine);
         }
     }
 
     /**
-     * Delete all lines from lists, that are smaller than 1/3 width or 1/5 height of picture.
+     * Store lines to final lists and delete all lines from lists, that are smaller than 1/3 width or 1/5 height of picture.
      * @param width of picture.
      * @param height of picture.
      */
-    public void deleteNoise(int width, int height){
+    public void storeLinesAndDeleteNoise(int width, int height){
+        addLines(this.horizontalMap, this.horizontalLines);
+        addLines(this.verticalMap, this.verticalLines);
+
         deleteShortLines(this.horizontalLines, width/3);
         deleteShortLines(this.verticalLines, height/5);
     }

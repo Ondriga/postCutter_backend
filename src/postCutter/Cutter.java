@@ -63,7 +63,7 @@ public class Cutter {
             for(EdgeDetector edgeMethod : edgeMethods){
                 lineHandler.findLines(edgeMethod.highlightEdge(grayScale));
             }
-            lineHandler.deleteNoise(grayScale.cols(), grayScale.rows());
+            lineHandler.storeLinesAndDeleteNoise(grayScale.cols(), grayScale.rows());
             rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());
         }
     }

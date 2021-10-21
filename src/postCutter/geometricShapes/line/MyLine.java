@@ -17,10 +17,8 @@ public abstract class MyLine {
     private Coordinate startPoint;
     /// Second coordinate of line.
     private Coordinate endPoint;
-    /// Constant for allow position threshold for pixel or line.
-    protected static final int ALLOW_POSITION_MOVE = 4;
     /// Constant for allow empty space size in line.
-    protected static final int ALLOW_EMPTY_RANGE = 10;
+    protected static final int ALLOW_EMPTY_RANGE = 5;
 
     /**
      * Constructor.
@@ -78,11 +76,11 @@ public abstract class MyLine {
     public abstract boolean extendByOne(Coordinate coordinate);
 
     /**
-     * Try merge line with other. Extend is successful if lines are covering.
+     * Try merge line with other. Extend is successful if lines are covering. Extend do not check lines levels.
      * @param line for merge.
-     * @return 0 if lines are at the same level and covering. -1 if line is before this line. 1 if line is after this line.
+     * @return true if lines are covering otherwise false.
      */
-    public abstract int extendByLine(MyLine line);
+    public abstract boolean extendByLine(MyLine line);
 
     /**
      * Check if line have similar length and position in x way if they are horizontal lines and y way if they are vertical.
@@ -90,6 +88,19 @@ public abstract class MyLine {
      * @return true if they are similar, otherwise false.
      */
     public abstract boolean isSimilar(MyLine line);
+
+    /**
+     * Level of line is x value in horizontal line and y value in vertical line.
+     * @return level of line.
+     */
+    public abstract int getLevel();
+
+    /**
+     * Compare x value in start points of horizontal lines and y value of vertical lines.
+     * @param line for compare.
+     * @return true if this line have x/y value smaller than line.
+     */
+    public abstract boolean isBefore(MyLine line);
 
     /**
      * Override for equals function of the MyLine object
