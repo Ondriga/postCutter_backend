@@ -36,6 +36,7 @@ public class RectangleHandlerTests {
             mat.put(40, i, 255);
         }
         lineHandler.findLines(mat);
+        lineHandler.storeLinesAndDeleteNoise(50, 50);
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
         assertEquals("Corner A wasn`t [0, 10].", new Coordinate(0, 10), rectangleHandler.getRectangle().getCornerA());
@@ -56,7 +57,7 @@ public class RectangleHandlerTests {
             mat.put(i, 40, 255);
         }
         lineHandler.findLines(mat);
-
+        lineHandler.storeLinesAndDeleteNoise(40, 40);
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
         assertEquals("Corner A wasn`t [5, 10].", new Coordinate(5, 10), rectangleHandler.getRectangle().getCornerA());

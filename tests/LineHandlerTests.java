@@ -42,7 +42,8 @@ public class LineHandlerTests {
             mat1.put(1, i, 255);
         }
         lineHandler.findLines(mat1);
-        
+        lineHandler.storeLinesAndDeleteNoise(10, 10);
+
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("List size test", 1, list.size());
@@ -66,6 +67,7 @@ public class LineHandlerTests {
         }
 
         lineHandler.findLines(mat1);
+        lineHandler.storeLinesAndDeleteNoise(10, 10);
 
         List<MyLine> list = lineHandler.getVerticalLines();
 
@@ -93,7 +95,8 @@ public class LineHandlerTests {
         }
 
         lineHandler.findLines(mat1);
-
+        lineHandler.storeLinesAndDeleteNoise(20, 20);
+    
         List<MyLine> listHorizontal = lineHandler.getHorizontalLines();
         List<MyLine> listVertical = lineHandler.getVerticalLines();
 
@@ -123,6 +126,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("Horizontal list size test", 1, list.size());
@@ -144,6 +148,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getVerticalLines();
 
         assertEquals("Vertical list size test", 1, list.size());
@@ -167,8 +172,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
 
-        assertEquals("List size test before remove noise", 4, lineHandler.getVerticalLines().size());
-        lineHandler.deleteNoise(60, 60);
+        lineHandler.storeLinesAndDeleteNoise(60, 60);
         assertEquals("List size test after remove noise", 1, lineHandler.getVerticalLines().size());
     }
 
@@ -189,11 +193,11 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("Horizontal list size test", 1, list.size());
-        assertTrue("Start point of horizontal line wasn`t [0, 0]", list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
-    
+        assertTrue("Start point of horizontal line wasn`t [0, 0] but " + list.get(0).getStartPoint(), list.get(0).getStartPoint().equals(new Coordinate(0, 0)));
         assertTrue("End point of horizontal line wasn`t [30, 0]", list.get(0).getEndPoint().equals(new Coordinate(30, 0)));
     }
 
@@ -214,6 +218,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(40, 40);
         List<MyLine> list = lineHandler.getVerticalLines();
 
         assertEquals("Vertical list size test", 1, list.size());
@@ -228,11 +233,14 @@ public class LineHandlerTests {
     public void VerticalLinesNearEachOther(){
         for(int i=0; i<=10; i++){
             mat1.put(i, 0, 255);
-            mat2.put(i, 2, 255);
+        }
+        for(int i=0; i<=9; i++){
+            mat2.put(i, 1, 255);
         }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(10, 10);
         List<MyLine> list = lineHandler.getVerticalLines();
 
         assertEquals("Vertical list size test", 1, list.size());
@@ -247,11 +255,14 @@ public class LineHandlerTests {
     public void HorizontalLinesNearEachOther(){
         for(int i=0; i<=10; i++){
             mat1.put(0, i, 255);
-            mat2.put(2, i, 255);
+        }
+        for(int i=0; i<=9; i++){
+            mat2.put(1, i, 255);
         }
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(10, 10);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("Horizontal list size test", 1, list.size());
@@ -274,6 +285,7 @@ public class LineHandlerTests {
 
         lineHandler.findLines(mat1);
         lineHandler.findLines(mat2);
+        lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("Horizontal list size test", 1, list.size());
@@ -292,7 +304,6 @@ public class LineHandlerTests {
             mat1.put(0, i, 255);
             mat1.put(1, i, 255);
             mat2.put(0, i, 255);
-            mat2.put(2, i, 255);
             mat3.put(0, i, 255);
             mat4.put(0, i+2, 255);
         }
@@ -301,7 +312,6 @@ public class LineHandlerTests {
             mat1.put(10, i, 255);
             mat1.put(11, i, 255);
             mat2.put(10, i, 255);
-            mat2.put(12, i, 255);
             mat3.put(10, i, 255);
             mat4.put(10, i+2, 255);
         }
@@ -310,6 +320,7 @@ public class LineHandlerTests {
         lineHandler.findLines(mat2);
         lineHandler.findLines(mat3);
         lineHandler.findLines(mat4);
+        lineHandler.storeLinesAndDeleteNoise(20, 20);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
         assertEquals("Horizontal list size test", 2, list.size());
@@ -334,6 +345,7 @@ public class LineHandlerTests {
         }
 
         lineHandler.findLines(mat1);
+        lineHandler.storeLinesAndDeleteNoise(40, 40);
 
         List<MyLine> list = lineHandler.getVerticalLines();
 
