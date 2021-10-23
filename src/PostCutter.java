@@ -7,6 +7,7 @@
 
 import postCutter.Cutter;
 import postCutter.edgeDetection.*;
+import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.*;
 import postCutter.geometricShapes.rectangle.*;
 
@@ -34,6 +35,8 @@ import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+
+import inpainting.Inpainter;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -163,8 +166,12 @@ public class PostCutter extends JFrame{
                 this.flagFinal = 1;
                 break;
             case 1:
-                button.setText("METHODS");
+                button.setText("INPAINTING");
                 this.flagFinal = 2;
+                break;
+            case 2:
+                button.setText("METHODS");
+                this.flagFinal = 3;
                 break;
             default:
                 button.setText("FINAL");
@@ -231,7 +238,7 @@ public class PostCutter extends JFrame{
                     printRectangle(canvasRectangle, cutter.getRectangle());
                     labelLines.setIcon(getResizedIcon(mat2BufferedImage(canvasRectangle), labelLines.getSize()));
                     break;
-                default:
+                case 2:
                     cutter.loadPicture(picture.clone());
                     Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
                     printLines(canvas, cutter.getHorizontalLines());
@@ -239,6 +246,20 @@ public class PostCutter extends JFrame{
                     printRectangle(canvas, cutter.getRectangle());
                     labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvas), labelChange.getMaximumSize()));
                     labelLines.setIcon(getResizedIcon(mat2BufferedImage(cutter.getCroppedImage()), labelLines.getSize()));
+                    break;
+                default:
+                    MyRectangle rectangle = MyRectangle.createRectangle(new Coordinate(369, 1350), new Coordinate(708, 1464));
+                    picture = Imgcodecs.imread("inpainting_photo/photo.png");
+                    labelOrigin.setIcon(getResizedIcon(mat2BufferedImage(picture), labelOrigin.getSize()));
+                    Mat canvasRect = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(0));
+                    for(int y=rectangle.getCornerA().getY(); y<=rectangle.getCornerB().getY(); y++){
+                        for(int x=rectangle.getCornerA().getX(); x<=rectangle.getCornerB().getX(); x++){
+                            canvasRect.put(y, x, 255);
+                        }
+                    }
+                    labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasRect), labelChange.getSize()));
+                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(Inpainter.inpainging(picture, rectangle)), labelLines.getSize()));
+
             }
         } catch (IOException e) {
             e.printStackTrace();
