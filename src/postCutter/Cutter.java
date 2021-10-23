@@ -30,8 +30,10 @@ public class Cutter {
     private LineHandler lineHandler = new LineHandler();
     /// Rectangle handler.
     private RectangleHandler rectangleHandler = new RectangleHandler();
-
+    /// Matrix of picture.
     private Mat picture = null;
+    /// Permissions for edge methods.
+    private Boolean[] edgeMethodsPermission = {true, true, true, true};
 
     /**
      * Constructor.
@@ -41,6 +43,25 @@ public class Cutter {
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
         edgeMethods.add(new Canny("CANNY"));
+    }
+
+    /**
+     * Set permissions for edge methods. At least one method must be allowed.
+     * @param prewitt permission.
+     * @param sobel permission.
+     * @param laplace permission.
+     * @param canny permission.
+     * @return true if set was successful, otherwise false.
+     */
+    public boolean setMethodsPermission(boolean prewitt, boolean sobel, boolean laplace, boolean canny){
+        if(prewitt || sobel || laplace || canny){
+            edgeMethodsPermission[0] = prewitt;
+            edgeMethodsPermission[1] = sobel;
+            edgeMethodsPermission[2] = laplace;
+            edgeMethodsPermission[3] = canny;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -60,8 +81,10 @@ public class Cutter {
         if(this.picture != null){
             Mat grayScale = new Mat();
             Imgproc.cvtColor(this.picture, grayScale, Imgproc.COLOR_RGB2GRAY);
-            for(EdgeDetector edgeMethod : edgeMethods){
-                lineHandler.findLines(edgeMethod.highlightEdge(grayScale));
+            for(int i=0; i<edgeMethods.size(); i++){
+                if(edgeMethodsPermission[i]){
+                    lineHandler.findLines(edgeMethods.get(i).highlightEdge(grayScale));
+                }
             }
             lineHandler.storeLinesAndDeleteNoise(grayScale.cols(), grayScale.rows());
             rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());
