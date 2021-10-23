@@ -11,6 +11,12 @@ import postCutter.geometricShapes.Coordinate;
 
 /**
  * Representing line.
+ * 
+ *                        A
+ *                        +
+ *   A+-----+B     or     |
+ *                        +
+ *                        B
  */
 public abstract class MyLine {
     /// First coordinate of line.

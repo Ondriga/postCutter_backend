@@ -11,6 +11,10 @@ import postCutter.geometricShapes.Coordinate;
 
 /**
  * Representing rectangle.
+ * 
+ *     A+------+
+ *      |      |
+ *      +------+B   
  */
 public class MyRectangle {
     /// Top left coordinate of rectangle.
