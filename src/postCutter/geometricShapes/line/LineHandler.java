@@ -44,7 +44,7 @@ public final class LineHandler {
             for(int x=0; x<picture.cols(); x++){
                 if(picture.get(y, x)[0] >THRESHOLD_COLOR){
                     Coordinate coordinate = new Coordinate(x, y);
-                    addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));
+                    x = addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));
                     addDot(x, this.verticalMap, VerticalLine.createLine(coordinate, coordinate));
                 }
             }
@@ -56,24 +56,26 @@ public final class LineHandler {
      * and column if it is for horizontal lines.
      * @param key position in row for vertical lines or column for horizontal lines
      * @param lineMap horizontal or vertical map with lines.
-     * @param newLine vertical or horizontal line representing black dot. 
+     * @param dotLine vertical or horizontal line representing black dot. 
+     * @return x value of last known white pixel in row.
      */
-    private void addDot(int key, HashMap<Integer, List<MyLine>> lineMap, MyLine newLine){
+    private int addDot(int key, HashMap<Integer, List<MyLine>> lineMap, MyLine dotLine){
         List<MyLine> lineList = lineMap.get(key);
         if(lineList == null){
             lineList = new ArrayList<>();
             lineMap.put(key, lineList);
         }
         for(int i=0; i<lineList.size(); i++){
-            if(lineList.get(i).extendByOne(newLine.getStartPoint())){
-                return;
+            if(lineList.get(i).extendByOne(dotLine.getStartPoint())){
+                return lineList.get(i).getEndPoint().getX();
             }
-            if(newLine.isBefore(lineList.get(i))){
-                lineList.add(i, newLine);
-                return;
+            if(dotLine.isBefore(lineList.get(i))){
+                lineList.add(i, dotLine);
+                return dotLine.getEndPoint().getX();
             }
         }
-        lineList.add(newLine);
+        lineList.add(dotLine);
+        return dotLine.getEndPoint().getX();
     }
 
     /**

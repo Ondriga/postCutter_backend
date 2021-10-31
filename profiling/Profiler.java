@@ -20,7 +20,8 @@ import postCutter.Cutter;
 public class Profiler {
 
     /// Constant for directory name in which are screenshots for process.
-    private static final String DIRECTORY = "profiling_photos/";
+    // private static final String DIRECTORY = "profiling_photos/";
+    private static final String DIRECTORY = "screenshots3/";
 
     static{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

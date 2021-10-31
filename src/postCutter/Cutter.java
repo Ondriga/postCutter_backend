@@ -39,10 +39,10 @@ public class Cutter {
      * Constructor.
      */
     public Cutter(){
-        edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
-        edgeMethods.add(new Sobel("SOBEL OPERATOR"));
-        edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
         edgeMethods.add(new Canny("CANNY"));
+        edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
+        edgeMethods.add(new Sobel("SOBEL OPERATOR"));
+        edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
     }
 
     /**
@@ -55,10 +55,10 @@ public class Cutter {
      */
     public boolean setMethodsPermission(boolean prewitt, boolean sobel, boolean laplace, boolean canny){
         if(prewitt || sobel || laplace || canny){
-            edgeMethodsPermission[0] = prewitt;
-            edgeMethodsPermission[1] = sobel;
-            edgeMethodsPermission[2] = laplace;
-            edgeMethodsPermission[3] = canny;
+            edgeMethodsPermission[3] = prewitt;
+            edgeMethodsPermission[2] = sobel;
+            edgeMethodsPermission[1] = laplace;
+            edgeMethodsPermission[0] = canny;
             return true;
         }
         return false;
