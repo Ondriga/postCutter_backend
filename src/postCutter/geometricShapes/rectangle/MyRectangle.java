@@ -45,6 +45,19 @@ public class MyRectangle {
         return null;
     }
 
+
+    /**
+     * Move rectangle by x and y value.
+     * @param x by hove much to move with x
+     * @param y by hove much to move with y
+     */
+    public void move(int x, int y){
+        cornerA.setX(cornerA.getX() + x);
+        cornerA.setY(cornerA.getY() + y);
+        cornerB.setX(cornerB.getX() + x);
+        cornerB.setY(cornerB.getY() + y);
+    }
+
     /**
      * Getter for coordinate of corner A.
      * @return cornerA
