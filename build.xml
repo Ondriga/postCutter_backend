@@ -57,7 +57,10 @@
 
         <target name="compileFinal" depends="clean">
             <mkdir dir="${classes.dir}"/>
-            <javac target="1.8" source="1.8" classpathref="classpath" includeantruntime="true" srcdir="${src.dir}/postCutter" destdir="${classes.dir}"/>
+            <javac target="1.8" source="1.8" classpathref="classpath" includeantruntime="true" destdir="${classes.dir}">
+                <src path="${src.dir}/postCutter"/>
+                <src path="${src.dir}/inpainting"/>
+            </javac>
         </target>
 
         <target name="final" depends="compileFinal">
