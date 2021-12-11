@@ -108,6 +108,14 @@ public class Cutter {
     }
 
     /**
+     * Setter for rectangle.
+     * @param rectangle for store.
+     */
+    public void setRectangle(MyRectangle rectangle){
+        rectangleHandler.setRectangle(rectangle);
+    }
+
+    /**
      * Getter for rectangle.
      * @return rectangle.
      */

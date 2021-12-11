@@ -159,6 +159,14 @@ public final class RectangleHandler {
     }
 
     /**
+     * Setter for rectangle.
+     * @param rectangle for store.
+     */
+    public void setRectangle(MyRectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    /**
      * Getter for rectangle.
      * @return rectangle.
      */
