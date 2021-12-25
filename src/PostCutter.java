@@ -258,7 +258,7 @@ public class PostCutter extends JFrame{
                         }
                     }
                     labelChange.setIcon(getResizedIcon(mat2BufferedImage(canvasRect), labelChange.getSize()));
-                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(Inpainter.inpainging(picture, rectangle)), labelLines.getSize()));
+                    labelLines.setIcon(getResizedIcon(mat2BufferedImage(Inpainter.inpaintingTelea(picture, rectangle)), labelLines.getSize()));
 
             }
         } catch (IOException e) {

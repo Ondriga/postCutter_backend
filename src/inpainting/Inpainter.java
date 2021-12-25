@@ -42,16 +42,37 @@ public class Inpainter {
     }
 
     /**
-     * Inpaint picture by rectangle.
+     * Inpaint picture by rectangle with telea algorithm.
      * @param picture for inpainting.
-     * @param rectangle define are for inpaint.
+     * @param rectangle define area for inpainting.
      * @return inpainting picture.
      */
-    public static Mat inpainging(Mat picture, MyRectangle rectangle){
+    public static Mat inpaintingTelea(Mat picture, MyRectangle rectangle) {
+        return inpainting(picture, rectangle, Photo.INPAINT_TELEA);
+    }
+
+    /**
+     * Inpaint picture by rectangle with ns algorithm.
+     * @param picture for inpainting.
+     * @param rectangle define area for inpainting.
+     * @return inpainting picture.
+     */
+    public static Mat inpaintingNS(Mat picture, MyRectangle rectangle) {
+        return inpainting(picture, rectangle, Photo.INPAINT_NS);
+    }
+
+    /**
+     * Inpaint picture by rectangle.
+     * @param picture for inpainting.
+     * @param rectangle define area for inpainting.
+     * @param flags choose the method for inpainting.
+     * @return inpainting picture.
+     */
+    private static Mat inpainting(Mat picture, MyRectangle rectangle, int flags){
         Mat dst = new Mat(picture.rows(), picture.cols(), picture.type());
         Mat mask = new Mat(picture.rows(), picture.cols(), CvType.CV_8UC1, new Scalar(0));
         paintMask(mask, rectangle);
-        Photo.inpaint(picture, mask, dst, INPAINT_RADIUS, Photo.INPAINT_TELEA);
+        Photo.inpaint(picture, mask, dst, INPAINT_RADIUS, flags);
         return dst;
     }
 }
