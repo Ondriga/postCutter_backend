@@ -35,6 +35,8 @@ public class Cutter {
     /// Permissions for edge methods.
     private Boolean[] edgeMethodsPermission = {true, true, true, true};
 
+    private MyProgress progress = null;
+
     /**
      * Constructor.
      */
@@ -43,6 +45,15 @@ public class Cutter {
         edgeMethods.add(new Laplace("LAPLACE OPERATOR"));
         edgeMethods.add(new Sobel("SOBEL OPERATOR"));
         edgeMethods.add(new Prewitt("PREWITT OPERATOR"));
+    }
+
+    /**
+     * Constructor with progress 
+     * @param progress object managing progress information
+     */
+    public Cutter(MyProgress progress){
+        this();
+        this.progress = progress;
     }
 
     /**
@@ -75,16 +86,36 @@ public class Cutter {
     }
 
     /**
+     * Set max value for progress bar.
+     */
+    private void setMaxProgressValue(){
+        int maxValue = 0;
+        for(int i=0; i<edgeMethods.size(); i++){
+            if(edgeMethodsPermission[i]){
+                maxValue += this.picture.rows();
+            }
+        }
+        this.progress.setMaxValue(maxValue);
+    }
+
+    /**
      * Find cut for picture. This method find vertical, horizontal lines and rectangle for final cut.
      */
     private void findCut(){
         if(this.picture != null){
+            if(this.progress != null){
+                setMaxProgressValue();
+            }
             Mat grayScale = new Mat();
             Imgproc.cvtColor(this.picture, grayScale, Imgproc.COLOR_RGB2GRAY);
             for(int i=0; i<edgeMethods.size(); i++){
                 if(edgeMethodsPermission[i]){
-                    lineHandler.findLines(edgeMethods.get(i).highlightEdge(grayScale));
+                    lineHandler.findLines(edgeMethods.get(i).highlightEdge(grayScale), this.progress);
                 }
+            }
+            if(this.progress != null && this.progress.shouldStop()){
+                this.clear();
+                return;
             }
             lineHandler.storeLinesAndDeleteNoise(grayScale.cols(), grayScale.rows());
             rectangleHandler.findRectangle(getHorizontalLines(), getVerticalLines(), grayScale.cols(), grayScale.rows());

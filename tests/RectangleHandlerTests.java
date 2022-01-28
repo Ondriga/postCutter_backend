@@ -35,7 +35,7 @@ public class RectangleHandlerTests {
             mat.put(10, i, 255);
             mat.put(40, i, 255);
         }
-        lineHandler.findLines(mat);
+        lineHandler.findLines(mat, null);
         lineHandler.storeLinesAndDeleteNoise(50, 50);
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
@@ -56,7 +56,7 @@ public class RectangleHandlerTests {
             mat.put(i, 5, 255);
             mat.put(i, 40, 255);
         }
-        lineHandler.findLines(mat);
+        lineHandler.findLines(mat, null);
         lineHandler.storeLinesAndDeleteNoise(40, 40);
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 
@@ -69,7 +69,7 @@ public class RectangleHandlerTests {
      */
     @Test
     public void emptyCanvasTest(){
-        lineHandler.findLines(mat);
+        lineHandler.findLines(mat, null);
 
         rectangleHandler.findRectangle(lineHandler.getHorizontalLines(), lineHandler.getVerticalLines(), 50, 50);
 

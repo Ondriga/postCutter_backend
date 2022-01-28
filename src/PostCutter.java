@@ -6,6 +6,7 @@
  */
 
 import postCutter.Cutter;
+import postCutter.MyProgress;
 import postCutter.edgeDetection.*;
 import postCutter.geometricShapes.Coordinate;
 import postCutter.geometricShapes.line.*;
@@ -82,6 +83,9 @@ public class PostCutter extends JFrame{
     private List<EdgeDetector> edgeMethods = new ArrayList<>();
     /// Actual using edge detection method object 
     private EdgeDetector edgeDetector;
+
+    /// Progress monitor
+    private ActualProgress progress = new ActualProgress();
 
     static{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -219,7 +223,7 @@ public class PostCutter extends JFrame{
             img = ImageIO.read(new File(path));
             labelOrigin.setIcon(getResizedIcon(img, labelOrigin.getSize()));
             Mat picture = Imgcodecs.imread(path);
-            Cutter cutter = new Cutter();
+            Cutter cutter = new Cutter(this.progress);
             switch(this.flagFinal){
                 case 0:
                     Mat grayScale = new Mat();
@@ -312,7 +316,7 @@ public class PostCutter extends JFrame{
         Mat canvas = new Mat(picture.rows(), picture.cols(), CvType.CV_8U, new Scalar(255));
         
         LineHandler lineHandler = new LineHandler();
-        lineHandler.findLines(picture);
+        lineHandler.findLines(picture, null);
         lineHandler.storeLinesAndDeleteNoise(picture.cols(), picture.rows());
         printLines(canvas, lineHandler.getHorizontalLines());
         printLines(canvas, lineHandler.getVerticalLines());
@@ -383,6 +387,17 @@ public class PostCutter extends JFrame{
             e.printStackTrace();
         }
         return bufImage;
+    }
+
+    /**
+     * Class for monitoring progress.
+     */
+    private class ActualProgress extends MyProgress{
+        @Override
+        public void update(int progress){
+            int percent = (progress * 100) / this.getMaxValue();
+            System.out.println(progress + "/" + this.getMaxValue() + " [" + percent + "%]");
+        }
     }
 
 }

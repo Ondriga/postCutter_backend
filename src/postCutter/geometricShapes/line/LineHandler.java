@@ -18,6 +18,7 @@ import org.opencv.core.Mat;
 
 import postCutter.edgeDetection.EdgeDetector;
 import postCutter.geometricShapes.Coordinate;
+import postCutter.MyProgress;
 
 /**
  * This class is made for find and store lines in picture changed by edge detection method.
@@ -39,9 +40,18 @@ public final class LineHandler {
      * Find horizontal and vertical lines. Work only with grayscale picture changed with edge detection method.
      * @param picture where the lines are finding. Picture must be in grayscale.
      */
-    public void findLines(Mat picture){
+    public void findLines(Mat picture, MyProgress progress){
         for(int y=0; y<picture.rows(); y++){
+            if(progress != null){
+                if(progress.shouldStop()){
+                    return;
+                }
+                progress.increase();
+            }
             for(int x=0; x<picture.cols(); x++){
+                if(progress != null && progress.shouldStop()){
+                    return;
+                }
                 if(picture.get(y, x)[0] >THRESHOLD_COLOR){
                     Coordinate coordinate = new Coordinate(x, y);
                     x = addDot(y, this.horizontalMap, HorizontalLine.createLine(coordinate, coordinate));

@@ -41,7 +41,7 @@ public class LineHandlerTests {
         for(int i=6; i<=10; i++){
             mat1.put(1, i, 255);
         }
-        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat1, null);
         lineHandler.storeLinesAndDeleteNoise(10, 10);
 
         List<MyLine> list = lineHandler.getHorizontalLines();
@@ -66,7 +66,7 @@ public class LineHandlerTests {
             mat1.put(i, 1, 255);
         }
 
-        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat1, null);
         lineHandler.storeLinesAndDeleteNoise(10, 10);
 
         List<MyLine> list = lineHandler.getVerticalLines();
@@ -94,7 +94,7 @@ public class LineHandlerTests {
             mat1.put(i, 2, 255);
         }
 
-        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat1, null);
         lineHandler.storeLinesAndDeleteNoise(20, 20);
     
         List<MyLine> listHorizontal = lineHandler.getHorizontalLines();
@@ -124,8 +124,8 @@ public class LineHandlerTests {
             mat2.put(2, i, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
@@ -146,8 +146,8 @@ public class LineHandlerTests {
             mat2.put(i, 1, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getVerticalLines();
 
@@ -170,7 +170,7 @@ public class LineHandlerTests {
             mat1.put(i, 20, 255);
         }
 
-        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat1, null);
 
         lineHandler.storeLinesAndDeleteNoise(60, 60);
         assertEquals("List size test after remove noise", 1, lineHandler.getVerticalLines().size());
@@ -191,8 +191,8 @@ public class LineHandlerTests {
             mat2.put(0, i, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
@@ -216,8 +216,8 @@ public class LineHandlerTests {
             mat1.put(i, 0, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(40, 40);
         List<MyLine> list = lineHandler.getVerticalLines();
 
@@ -238,8 +238,8 @@ public class LineHandlerTests {
             mat2.put(i, 1, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(10, 10);
         List<MyLine> list = lineHandler.getVerticalLines();
 
@@ -260,8 +260,8 @@ public class LineHandlerTests {
             mat2.put(1, i, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(10, 10);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
@@ -283,8 +283,8 @@ public class LineHandlerTests {
             mat2.put(0, i, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
         lineHandler.storeLinesAndDeleteNoise(30, 30);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
@@ -316,10 +316,10 @@ public class LineHandlerTests {
             mat4.put(10, i+2, 255);
         }
 
-        lineHandler.findLines(mat1);
-        lineHandler.findLines(mat2);
-        lineHandler.findLines(mat3);
-        lineHandler.findLines(mat4);
+        lineHandler.findLines(mat1, null);
+        lineHandler.findLines(mat2, null);
+        lineHandler.findLines(mat3, null);
+        lineHandler.findLines(mat4, null);
         lineHandler.storeLinesAndDeleteNoise(20, 20);
         List<MyLine> list = lineHandler.getHorizontalLines();
 
@@ -344,7 +344,7 @@ public class LineHandlerTests {
             mat1.put(i, 40, 255);
         }
 
-        lineHandler.findLines(mat1);
+        lineHandler.findLines(mat1, null);
         lineHandler.storeLinesAndDeleteNoise(40, 40);
 
         List<MyLine> list = lineHandler.getVerticalLines();
