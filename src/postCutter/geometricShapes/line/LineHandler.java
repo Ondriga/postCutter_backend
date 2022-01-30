@@ -32,6 +32,8 @@ public final class LineHandler {
     private HashMap<Integer, List<MyLine>> horizontalMap = new HashMap<>();
     /// Map for temporary storing vertical lines.
     private HashMap<Integer, List<MyLine>> verticalMap = new HashMap<>();
+    /// Stop flag for lines detection progress.
+    private boolean stopFlag = false;
 
     /// Constant for color limit to by count as black.
     private static final int THRESHOLD_COLOR = 85;
@@ -42,14 +44,14 @@ public final class LineHandler {
      */
     public void findLines(Mat picture, MyProgress progress){
         for(int y=0; y<picture.rows(); y++){
-            if(progress != null){
-                if(progress.shouldStop()){
-                    return;
-                }
+            if(stopFlag){
+                return;
+            }
+            if(progress != null && y%10 == 0){
                 progress.increase();
             }
             for(int x=0; x<picture.cols(); x++){
-                if(progress != null && progress.shouldStop()){
+                if(stopFlag){
                     return;
                 }
                 if(picture.get(y, x)[0] >THRESHOLD_COLOR){
@@ -147,12 +149,28 @@ public final class LineHandler {
     }
 
     /**
-     * This method clear horizontal and vertical lists and maps of lines.
+     * This method clear horizontal and vertical lists and maps of lines. Reset stop flag.
      */
     public void clear(){
         this.horizontalLines.clear();
         this.verticalLines.clear();
         this.horizontalMap.clear();
         this.verticalMap.clear();
+        this.stopFlag = false;
+    }
+
+    /**
+     * Setter for stop flag for true.
+     */
+    public void stop(){
+        this.stopFlag = true;
+    }
+
+    /**
+     * Getter for stop flag.
+     * @return value of stop flag.
+     */
+    public boolean getStopFlag(){
+        return this.stopFlag;
     }
 }

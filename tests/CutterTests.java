@@ -52,14 +52,15 @@ public class CutterTests {
     }
 
     /**
-     * Test for stop flag trigger.
+     * Test for stop flag trigger. Stop flag is trigger after 0.5 second.
      */
     @Test
     public void stopFlagTest(){
         Progress progress = new Progress();
         Cutter cutter2 = new Cutter(progress);
+        StopFlagThread stopFlagThread = new StopFlagThread(cutter2);
 
-        progress.setStopFlag();
+        stopFlagThread.start();
         cutter2.loadPicture(largeMat);
 
         assertEquals("Horizontal lines should be empty.", 0, cutter2.getHorizontalLines().size());
@@ -72,6 +73,28 @@ public class CutterTests {
      */
     private class Progress extends MyProgress{
         @Override
-        public void update(int progress) {}
+        public void update(int progress, int maxValue) {}
+    }
+
+    /**
+     * Representing call stop process after 0.5 second.
+     */
+    private class StopFlagThread extends Thread{
+        private final Cutter cutter;
+
+        public StopFlagThread(Cutter cutter){
+            this.cutter = cutter;
+        }
+
+        @Override
+        public void run() {
+            try{
+                Thread.sleep(500);
+            }
+            catch(InterruptedException ex){
+                Thread.currentThread().interrupt();
+            }
+            cutter.stop();
+        }
     }
 }

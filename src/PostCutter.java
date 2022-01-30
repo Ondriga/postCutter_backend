@@ -394,9 +394,9 @@ public class PostCutter extends JFrame{
      */
     private class ActualProgress extends MyProgress{
         @Override
-        public void update(int progress){
-            int percent = (progress * 100) / this.getMaxValue();
-            System.out.println(progress + "/" + this.getMaxValue() + " [" + percent + "%]");
+        public void update(int progress, int maxValue){
+            int percent = (progress * 100) / maxValue;
+            System.out.println(progress + "/" + maxValue + " [" + percent + "%]");
         }
     }
 

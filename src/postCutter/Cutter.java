@@ -34,7 +34,7 @@ public class Cutter {
     private Mat picture = null;
     /// Permissions for edge methods.
     private Boolean[] edgeMethodsPermission = {true, true, true, true};
-
+    /// Monitor of progress.
     private MyProgress progress = null;
 
     /**
@@ -92,7 +92,7 @@ public class Cutter {
         int maxValue = 0;
         for(int i=0; i<edgeMethods.size(); i++){
             if(edgeMethodsPermission[i]){
-                maxValue += this.picture.rows();
+                maxValue += this.picture.rows()/10;
             }
         }
         this.progress.setMaxValue(maxValue);
@@ -113,7 +113,7 @@ public class Cutter {
                     lineHandler.findLines(edgeMethods.get(i).highlightEdge(grayScale), this.progress);
                 }
             }
-            if(this.progress != null && this.progress.shouldStop()){
+            if(lineHandler.getStopFlag()){
                 this.clear();
                 return;
             }
@@ -152,6 +152,10 @@ public class Cutter {
      */
     public MyRectangle getRectangle(){
         return rectangleHandler.getRectangle();
+    }
+
+    public void stop(){
+        this.lineHandler.stop();
     }
 
     /**

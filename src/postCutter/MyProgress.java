@@ -8,11 +8,9 @@
 package postCutter;
 
 /**
- * Representing information about cutter progression. Stop flag can be used only one and can`t be reset.
+ * Representing information about cutter progression.
  */
 public abstract class MyProgress {
-    /// Flag for stop cutter process.
-    private boolean stopFlag = false;
     /// Max value of progress. Default value is 100.
     private int maxValue = 100;
     /// Actual progress value. Default value is 0.
@@ -21,23 +19,9 @@ public abstract class MyProgress {
     /**
      * Method definition. This method is triggering when the progress increase.
      * @param progress actual progress value.
+     * @param maxValue max value of progress.
      */
-    public abstract void update(int progress);
-
-    /**
-     * Set stop flag on true.
-     */
-    public final void setStopFlag(){
-        this.stopFlag = true;
-    }
-
-    /**
-     * Get info about stop flag.
-     * @return value of stop flag.
-     */
-    public boolean shouldStop(){
-        return this.stopFlag;
-    }
+    public abstract void update(int progress, int maxValue);
 
     /**
      * Change max value of progress. And reset actual progress value and stop flag.
@@ -53,14 +37,6 @@ public abstract class MyProgress {
      */
     public void increase(){
         this.actual++;
-        update(this.actual);
-    }
-
-    /**
-     * Getter for max value of progress.
-     * @return max value of progress.
-     */
-    public int getMaxValue(){
-        return this.maxValue;
+        update(this.actual, this.maxValue);
     }
 }
