@@ -114,7 +114,7 @@ public class Cutter {
                 }
             }
             if(lineHandler.getStopFlag()){
-                this.clear();
+                this.lineHandler.clear();
                 return;
             }
             lineHandler.storeLinesAndDeleteNoise(grayScale.cols(), grayScale.rows());
@@ -154,6 +154,9 @@ public class Cutter {
         return rectangleHandler.getRectangle();
     }
 
+    /**
+     * Trigger stop for lineHandler process.
+     */
     public void stop(){
         this.lineHandler.stop();
     }
