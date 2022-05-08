@@ -53,8 +53,6 @@ import java.awt.GridLayout;
 public class PostCutter extends JFrame{
     ///Constants for directory name with testing screenshots
     private static final String DIRECTORY = "screenshots/";
-    //private static final String DIRECTORY = "screenshots2/";
-    //private static final String DIRECTORY = "screenshots3/";
     
 
     /// Component for display origin picture
