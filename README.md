@@ -39,4 +39,4 @@ V triede *PostCutter.java* sa nachádza metóda *mat2BufferedImage*. Táto metó
 
 ## Licencia
 
-Tento program je poskytovaný pod licenciou [GPL-3.0](/LICENSE).
+Tento program je poskytovaný pod licenciou [Apache 2.0](/LICENSE).
